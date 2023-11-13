@@ -47,7 +47,7 @@ const config: Config = {
         'pomegranate': '#C0392B',
         'belizehole': '#2980B9',
         'grey': '#f0f0f0',
-        'scream': '#F5F5F7'
+        'default': '#FAFAFC'
       },
       backdropBlur: {
         'xs': '2px'

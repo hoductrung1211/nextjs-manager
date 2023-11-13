@@ -1,6 +1,6 @@
 import axios from "./axios.config";
 
-axios.defaults.baseURL = "https://localhost:7203/api/authentication/";
+axios.defaults.baseURL = "https://localhost:44349/api/authentication/";
 
 interface IRegisterRequest {
     username: string,
@@ -20,6 +20,7 @@ interface ILoginRequest {
 interface ILoginResponse {
     accessToken: string,
     refreshToken: string,
+    fullName: string,
 }
 
 export const login = (loginRequest: ILoginRequest) => {

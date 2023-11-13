@@ -12,7 +12,9 @@ import { isAxiosError } from "axios";
 import { useRouter } from "next/navigation";
 
 export default function Login() {
-  return (
+    localStorage.clear();
+
+    return (
       <div className="grid place-items-center h-screen ">
           <div className="container flex rounded-lg overflow-hidden shadow-md">
               <section className="w-8/12 p-5 flex flex-col bg-grey">
@@ -37,12 +39,12 @@ function LoginSection() {
     const [inputs, setInputs] = useState<{ [key: string]: { label: string, value: string, type: HTMLInputTypeAttribute } }>({
         "username": {
             label: "Username",
-            value: "string",
+            value: "dinhtruongson",
             type: "text"
         },
         "password": {
             label: "Password",
-            value: "String@123",
+            value: "Dinhtruongson@123",
             type: "password",
         }
     })
@@ -60,7 +62,8 @@ function LoginSection() {
         try {
             const { data: {
                 accessToken,
-                refreshToken
+                refreshToken,
+                fullName
             }} = await login({
                 username: inputs['username'].value,
                 password: inputs['password'].value,
@@ -68,8 +71,8 @@ function LoginSection() {
             
             localStorage.setItem('accessToken', accessToken);
             localStorage.setItem('refreshToken', refreshToken);
-            
-            router.push("/");
+            localStorage.setItem('fullName', fullName);
+            router.push("/dashboard");
         }
         catch (error) {
             if (isAxiosError(error)) {

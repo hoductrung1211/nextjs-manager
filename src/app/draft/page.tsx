@@ -1,68 +1,63 @@
 'use client';
+import * as React from 'react';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
 
-import { Backdrop, Button, CircularProgress } from "@mui/material";
-import React, { useState } from "react";
- 
-export default function Page() {
-    const [parents, setParents] = useState({
-        0: [
-            0
-        ]
-    });
-    const [nextId, setNextId] = useState(1);
-
-    return (
-        <div className="h-screen w-screen justify-center items-center flex flex-col gap-3">
-            <section className="flex flex-col gap-1">
-                {
-                    Object.keys(parents).map(parent => (
-                        <div className="">
-                            {parent}
-                        </div>
-                    ))
-                }
-            </section>
-            <Button
-                variant="outlined"
-                onClick={() => {
-                setParents([
-                    ...parents,
-                    nextId
-                ]);
-                setNextId(nextId + 1);
-            }}>
-                Add
-            </Button>
-        </div> 
-    )
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
 }
 
-function Loading() {
-    const [open, setOpen] = React.useState(false);
-    
-    const handleOpen = () => {
-        setOpen(true);
+function CustomTabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
 
-        setTimeout(() => {
-            setOpen(false)
-        }, 2000);
-    };
-
-    return (
-<div className="flex gap-2">
-            <Button onClick={handleOpen}>Show backdrop</Button>
-            <Backdrop
-                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                open={open}
-            >
-                <Fan />
-            </Backdrop>
-        </div>
-    )
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          {children}
+        </Box>
+      )}
+    </div>
+  );
 }
 
-function Fan() {
-    return (
-        <i className="fa-solid fa-fan animate-spin fa-2xl text-[72px] text-white"></i>
-    )
+function a11yProps(index: number) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
+}
+
+export default function BasicTabs() {
+  const [value, setValue] = React.useState<0 | 1>(0);
+
+  const handleChange = (event: React.SyntheticEvent, newValue: 0 | 1) => {
+    setValue(newValue);
+  };
+
+  return (
+    <Box sx={{ width: '100%' }}>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+          <Tab label="Operating" {...a11yProps(0)} />
+          <Tab label="Waiting to review" {...a11yProps(1)} />
+        </Tabs>
+      </Box>
+      <CustomTabPanel value={value} index={0}>
+        Item One
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={1}>
+        Item Two
+      </CustomTabPanel>
+    </Box>
+  );
 }
