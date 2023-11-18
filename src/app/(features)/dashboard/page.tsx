@@ -1,5 +1,4 @@
-'use client';
-import EnhancedTable from "@/app/draft/table/CustomizationTable";
+'use client'; 
 
 export default function Page() {
     return (
@@ -10,7 +9,6 @@ export default function Page() {
                 </header>
                 <main className=" overflow-y-scroll drop-shadow-sm">
                     <div className=" ">
-                        <EnhancedTable />
                     </div>
                 </main>
             </div>

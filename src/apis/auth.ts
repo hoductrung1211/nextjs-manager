@@ -1,6 +1,8 @@
-import axios from "./axios.config";
+import configuredAxios from "./axios.config";
 
-axios.defaults.baseURL = "https://localhost:44349/api/authentication/";
+const axios = configuredAxios.create();
+
+const baseURL = "authentication";
 
 interface IRegisterRequest {
     username: string,
@@ -10,7 +12,7 @@ interface IRegisterRequest {
 }
 
 export const register = (registerRequest : IRegisterRequest) => {
-    return axios.post("register", registerRequest);
+    return axios.post(`${baseURL}/register`, registerRequest);
 }
 
 interface ILoginRequest {
@@ -24,5 +26,5 @@ interface ILoginResponse {
 }
 
 export const login = (loginRequest: ILoginRequest) => {
-    return axios.post<ILoginResponse>("login", loginRequest);
+    return axios.post<ILoginResponse>(`${baseURL}/login/insight`, loginRequest);
 }

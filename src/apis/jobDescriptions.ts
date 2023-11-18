@@ -1,6 +1,8 @@
-import axios from "./axios.config";
+import configuredAxios from "./axios.config";
 
-axios.defaults.baseURL = "https://localhost:7163/api/recruitments/";
+const axios = configuredAxios.create();
+
+const baseURL = "jobDescriptions";
 
 export interface IJobDescription {
     id: number;
@@ -15,5 +17,5 @@ export interface IJobDescription {
 }
 
 export const getAllJobDescriptions = () => {
-    return axios.get<IJobDescription[]>("");
+    return axios.get<IJobDescription[]>(`${baseURL}`);
 }

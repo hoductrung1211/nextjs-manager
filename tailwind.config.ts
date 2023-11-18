@@ -10,6 +10,7 @@ const config: Config = {
   theme: {
     extend: {
       width: {
+        '68': '17rem',
         '76': '19rem',
         '112': '28rem',
         '120': '30rem',
@@ -42,12 +43,17 @@ const config: Config = {
       colors: {
         'dark': '#424245',
         'dark-light': '#6E6E73',
-        'concrete': '#95A5A6',
-        'greensea': '#16A085',
-        'pomegranate': '#C0392B',
-        'belizehole': '#2980B9',
+        'concrete': '#95A5A6', 
         'grey': '#f0f0f0',
-        'default': '#FAFAFC'
+        'default': '#FAFAFC',
+        "green-sea": "#16a085",
+        "nephritis": "#27ae60",
+        "belize-hole": "#2980b9",
+        "wisteria": "#8e44ad",
+        "midnight-blue": "#2c3e50",
+        "orange": "#f39c12",
+        "pumpkin": "#d35400",
+        "pomegranate": "#c0392b"
       },
       backdropBlur: {
         'xs': '2px'

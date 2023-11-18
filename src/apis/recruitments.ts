@@ -1,5 +1,6 @@
-import axios from "./axios.config";
+import configuredAxios from "./axios.config";
 
+const axios = configuredAxios.create();
 axios.defaults.baseURL = "https://localhost:7163/api/recruitments/";
 
 export interface IRecruitment {
@@ -11,6 +12,7 @@ export interface IRecruitment {
 }
 
 export const getAllRecruitments = () => {
+    console.log(axios.defaults.baseURL);
     return axios.get<IRecruitment[]>("");
 }
 

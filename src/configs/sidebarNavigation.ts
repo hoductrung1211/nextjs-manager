@@ -14,7 +14,7 @@ export const managerNavigations: INavigation[] = [
             {
                 id: 1,
                 text: "Recruitments",
-                icon: "chart-simple",
+                icon: "handshake-simple",
                 href: "/recruitments"
             },
             {

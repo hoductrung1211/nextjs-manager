@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, AlertColor, AlertProps, Slide, SlideProps, Snackbar } from "@mui/material";
+import { Alert, AlertColor, Slide, SlideProps, Snackbar } from "@mui/material";
 import React, { createContext, useContext, useState } from "react";
 
 const AlertContext = createContext<(props: {
@@ -56,7 +56,7 @@ export function AlertProvider({
         >
             <Alert
                 className="shadow-sm"
-                onClose={handleClose} severity={severity} sx={{ width: '100%' }}>
+                onClose={handleClose} severity={severity} sx={{ width: '100%', fontSize: 14 }}>
                 {message}
             </Alert>
         </Snackbar>

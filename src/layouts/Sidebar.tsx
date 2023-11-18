@@ -9,7 +9,7 @@ export default function Sidebar({
     children?: React.ReactNode
     }) {
     return (
-        <aside className="flex-shrink-0 w-72 h-screen flex flex-col border-r border-dashed ">
+        <aside className="flex-shrink-0 w-68 h-screen flex flex-col border-r border-dashed ">
             <div className="p-4 flex flex-col gap-4">
                 <Logo />
             </div>
