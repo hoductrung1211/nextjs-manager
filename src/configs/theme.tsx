@@ -4,7 +4,7 @@ import { createTheme } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
-const theme = createTheme({
+export const theme = createTheme({
     palette: {
         primary: {
             main: "#16A085",
@@ -48,36 +48,10 @@ const theme = createTheme({
         MuiButton: {
             "styleOverrides": {
                 "root": {
-                    "height": 38,
+                    "height": 40,
                     "fontWeight": 600,
-                    // "textTransform": "capitalize"
                 }
             }
-        }
+        },
     }
-});
-
-export default function Template({
-    children
-}: {
-    children: React.ReactNode
-}) {
-    // const [isAuthenticated, setIsAuthenticated] = useState(true);
-
-    // useEffect(() => {
-    //     if (!localStorage.getItem("accessToken"))
-    //         setIsAuthenticated(false);
-    // });
-    
-    return (
-        <ThemeProvider theme={theme}>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-            {children}
-        </LocalizationProvider>
-            {/* {isAuthenticated ?
-                <SidebarLayout>{children}</SidebarLayout> :
-                <Login />
-            } */}
-        </ThemeProvider>
-    )
-}
+}); 

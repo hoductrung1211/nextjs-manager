@@ -58,11 +58,9 @@ const config: Config = {
       keyframes: {
         'fade-in': {
           '0%': {
-            // 'background-color': '#7f8c8d'
             'opacity': '0.4'
           },
           '100%': {
-            // 'background-color': '#00000099'
             'opacity': '1'
           }
         },

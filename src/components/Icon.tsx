@@ -1,16 +1,18 @@
 
 interface IIconProps {
     name: string,
-    size?: 'lg' | 'xl' | '2xl' | '3xl' | ''
+    size?: 'lg' | 'xl' | '2xl' | '3xl' | '',
+    type?: 'solid' | 'brands'
 }
 
 export default function Icon({
     name,
-    size = ''
+    size = '',
+    type = 'solid'
 }: IIconProps) {
     return (
         <span className="">
-            <i className={`fa-solid fa-${name} fa-${size}`}></i>
+            <i className={`fa-${type} fa-${name} fa-${size}`}></i>
         </span>
     )
 }
