@@ -9,6 +9,8 @@ import { JobRequisitionFilter, getAllJobRequisitions } from "@/apis/jobRequisiti
 import dayjs, { Dayjs } from "dayjs";
 import AddIcon from '@mui/icons-material/Add';
 import useLoadingAnimation from "@/hooks/useLoadingAnimation";
+import RecruitmentStateChip from "../RecruitmentStateChip";
+import RecruitmentListContainer from "../RecruitmentContainer";
 
 interface IRecruitmentData {
     recruitmentId: number;
@@ -50,7 +52,7 @@ const headCells: HeadCell[] = [
         id: "reason",
         numeric: false,
         disablePadding: false,
-        label: "Reason",
+        label: "Justification",
         width: "15%"
     },
     {
@@ -76,41 +78,7 @@ const headCells: HeadCell[] = [
     },
 ];
 
-const RecruitmentState = ({
-    children,
-    stateId
-}: {
-    children: React.ReactNode,
-    stateId: number;
-}) => {
-    let colorClassName = "";
-    switch (stateId) {
-        case 1:
-            colorClassName = "text-pumpkin bg-pumpkin";
-            break;
-        case 2:
-            colorClassName = "text-green-sea bg-green-sea";
-            break;
-        case 3:
-            colorClassName = "text-belize-hole bg-belize-hole";
-            break;
-        case 4:
-            colorClassName = "text-wisteria bg-wisteria";
-            break;
-        case 5:
-            colorClassName = "text-gray-500 bg-gray-500";
-            break;
-        case 6:
-            colorClassName = "text-pomegranate bg-pomegranate";
-            break;
-    }    
 
-    return (
-        <span className={`p-2 rounded-md font-bold bg-opacity-10 ${colorClassName}`}>
-            {children}
-        </span>
-    )
-}
 
 export default function OperatingRecruitmentTable() {
     const [rows, setRows] = useState<readonly IRecruitmentData[]>([]);
@@ -142,7 +110,7 @@ export default function OperatingRecruitmentTable() {
         try { 
             setLoading(true);
 
-            const { data: jobRequisitions } = await getAllJobRequisitions(JobRequisitionFilter.operating);
+            const { data: jobRequisitions } = await getAllJobRequisitions(JobRequisitionFilter.Operating);
 
             const newRows = jobRequisitions.map(jr => ({
                 recruitmentId: jr.recruitmentId,
@@ -208,7 +176,7 @@ export default function OperatingRecruitmentTable() {
     };
 
     return (
-        <main className="h-full flex flex-col rounded-lg overflow-hidden bg-default">
+        <RecruitmentListContainer>
             <EnhancedTableToolbar
                 departmentId={departmentId}
                 onChangeDepartment={(event: SelectChangeEvent) => {
@@ -250,20 +218,20 @@ export default function OperatingRecruitmentTable() {
                                         id={labelId}
                                         scope="row"
                                     >
-                                        <Link href={`recruitments/${row.recruitmentId}/review`}>{row.title}</Link>
+                                        <Link href={`recruitments/${row.recruitmentId}`}>{row.title}</Link>
                                     </TableCell>
                                     <TableCell align="left">{row.department}</TableCell>
                                     <TableCell align="left">{row.reason}</TableCell>
                                     <TableCell align="right">{row.numberOfApplicant}</TableCell>
                                     <TableCell align="right">{row.createdDateTime.slice(0, 10)}</TableCell>
                                     <TableCell align="left">
-                                        <RecruitmentState stateId={row.stateId}>
+                                        <RecruitmentStateChip stateId={row.stateId}>
                                         {row.state}
-                                        </RecruitmentState>
+                                        </RecruitmentStateChip>
                                     </TableCell>
                                 </TableRow>
                             )
-                    })}
+                        })}
                     </TableBody>
                 </Table>
             </TableContainer>
@@ -277,6 +245,6 @@ export default function OperatingRecruitmentTable() {
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
             />
-        </main>
+        </RecruitmentListContainer>
     )
 }

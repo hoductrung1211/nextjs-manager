@@ -7,6 +7,7 @@ import Link from "next/link";
 import EnhancedTableHeadCheckbox from "@/components/mui/EnhancedTableHeadCheckbox";
 import { JobRequisitionFilter, getAllJobRequisitions } from "@/apis/jobRequisitions";
 import useLoadingAnimation from "@/hooks/useLoadingAnimation";
+import RecruitmentContainer from "../RecruitmentContainer";
 
 interface IRecruitmentData {
     id: number;
@@ -45,7 +46,7 @@ const headCells: HeadCell[] = [
         id: "reason",
         numeric: false,
         disablePadding: false,
-        label: "Reason",
+        label: "Justification",
         width: "10%"
     },
     {
@@ -99,7 +100,7 @@ export default function WaitingRecruitmentTable() {
         try {
             setLoading(true);
 
-            const { data: jobRequisitions } = await getAllJobRequisitions(JobRequisitionFilter.waitingToReview);
+            const { data: jobRequisitions } = await getAllJobRequisitions(JobRequisitionFilter.WaitingToReview);
 
             const newRows: IRecruitmentData[] = jobRequisitions.map(jr => ({
                 id: jr.recruitmentId,
@@ -164,16 +165,15 @@ export default function WaitingRecruitmentTable() {
     
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
-      };
-    
-      const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    };
+
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
-      };
-    // FOOT FOOT FOOT FOOT FOOT
+    };
 
     return (
-        <main className="h-full flex flex-col rounded-lg overflow-hidden bg-default">
+        <RecruitmentContainer>
             <EnhancedTableToolbar numSelected={selected.length} />
             <TableContainer sx={{ maxHeight: 500 }}>
                 <Table stickyHeader aria-label="sticky table" className="h-full">
@@ -219,7 +219,7 @@ export default function WaitingRecruitmentTable() {
                                     <TableCell align="right">{row.createdTime.slice(0, 10)}</TableCell>
                                 </TableRow>
                             )
-                    })}
+                        })}
                     </TableBody>
                 </Table>
             </TableContainer>
@@ -233,7 +233,7 @@ export default function WaitingRecruitmentTable() {
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
             />
-        </main>
+        </RecruitmentContainer>
     )
 }
  

@@ -55,7 +55,7 @@ export function AlertProvider({
             TransitionComponent={TransitionLeft}
         >
             <Alert
-                className="shadow-sm"
+                className="shadow-lg border"
                 onClose={handleClose} severity={severity} sx={{ width: '100%', fontSize: 14 }}>
                 {message}
             </Alert>

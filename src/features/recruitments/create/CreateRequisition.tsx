@@ -93,7 +93,6 @@ export default function CreateRequisition({
             <TextField
                 fullWidth variant="outlined"
                 id="number" label="Number of position"
-                
                 type="number"
                 value={numberOfPosition}
                 onChange={onChangeNumberOfPosition}

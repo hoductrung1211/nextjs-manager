@@ -98,9 +98,9 @@ export const getSkillCategoryById = (id: number) => {
 
 
 export interface ISkill {
-    id: number;
-    name: string;
-    categoryId: number;
+    skillId: number;
+    skillName: string;
+    skillCategoryId: number;
 }
 export const getAllSkills = () => {
     return axios.get<ISkill[]>("skills");

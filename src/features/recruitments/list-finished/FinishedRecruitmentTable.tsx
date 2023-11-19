@@ -8,6 +8,7 @@ import EnhancedTableToolbar from "../EnhancedTableToolbar";
 import { Dayjs } from "dayjs";
 import { JobRequisitionFilter, getAllJobRequisitions } from "@/apis/jobRequisitions";
 import useLoadingAnimation from "@/hooks/useLoadingAnimation";
+import RecruitmentContainer from "../RecruitmentContainer";
 
 interface IRecruitmentData {
     recruitmentId: number;
@@ -48,7 +49,7 @@ const headCells: HeadCell[] = [
         id: "reason",
         numeric: false,
         disablePadding: false,
-        label: "Reason",
+        label: "Justification",
         width: "15%"
     },
     {
@@ -98,7 +99,7 @@ export default function FinishedRecruitmentTable() {
     async function fetchRecruitments() {
         try { 
             setLoading(true);
-            const { data: jobRequisitions } = await getAllJobRequisitions(JobRequisitionFilter.finished);
+            const { data: jobRequisitions } = await getAllJobRequisitions(JobRequisitionFilter.Finished);
 
             const newRows: IRecruitmentData[] = jobRequisitions.map(jr => ({
                 recruitmentId: jr.recruitmentId,
@@ -164,7 +165,7 @@ export default function FinishedRecruitmentTable() {
     
 
     return (
-        <main className="h-full flex flex-col rounded-lg overflow-hidden bg-default">
+        <RecruitmentContainer>
             <EnhancedTableToolbar
                 departmentId={departmentId}
                 onChangeDepartment={(event: SelectChangeEvent) => {
@@ -197,7 +198,7 @@ export default function FinishedRecruitmentTable() {
                                         id={labelId}
                                         scope="row"
                                     >
-                                        <Link href={`recruitments/${row.recruitmentId}/review`}>{row.title}</Link>
+                                        <Link href={`recruitments/${row.recruitmentId}`}>{row.title}</Link>
                                     </TableCell>
                                     <TableCell align="left">{row.department}</TableCell>
                                     <TableCell align="left">{row.reason}</TableCell>
@@ -219,6 +220,6 @@ export default function FinishedRecruitmentTable() {
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
             />
-        </main>
+        </RecruitmentContainer>
     )
 }

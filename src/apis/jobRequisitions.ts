@@ -20,14 +20,15 @@ export interface IJobRequisition {
     hrName: string;
     hiringManagerId: number | null;
     hiringManagerName: string | null;
+    description: string;
     createdDateTime: Date;
 }
 
 export enum JobRequisitionFilter {
-    operating,
-    waitingToReview,
-    finished,
-    others
+    Operating,
+    WaitingToReview,
+    Finished,
+    Others
 }
 
 export const getAllJobRequisitions = (filter?: JobRequisitionFilter) => {
