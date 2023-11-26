@@ -1,13 +1,12 @@
 'use client';
-import {  Button, SelectChangeEvent, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow } from "@mui/material";
+import { SelectChangeEvent, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow } from "@mui/material";
 import EnhancedTableToolbar from "../EnhancedTableToolbar";
 import React, { useEffect, useMemo, useState } from "react";
 import EnhancedTableHead from "@/components/mui/EnhancedTableHead";
 import { Order, getComparator, stableSort } from "@/utils/functions/sort";
+import { RecruitmentFilter, getAllRecruitments } from "@/apis/recruitments";
 import Link from "next/link";
-import { JobRequisitionFilter, getAllJobRequisitions } from "@/apis/jobRequisitions";
 import  { Dayjs } from "dayjs";
-import AddIcon from '@mui/icons-material/Add';
 import useLoadingAnimation from "@/hooks/useLoadingAnimation";
 import RecruitmentStateChip from "../RecruitmentStateChip";
 import RecruitmentContainer from "../RecruitmentContainer";
@@ -15,14 +14,14 @@ import RecruitmentContainer from "../RecruitmentContainer";
 interface IRecruitmentData {
     recruitmentId: number;
     departmentId: string;
-    stateId: number;
+    recruitmentStateId: number;
     
-    title: string;
-    department: string;
-    reason: string;
+    recruitmentTitle: string;
+    departmentName: string;
+    jobJustificationName: string;
     description: string;
-    createdDateTime: string;
-    state: string;
+    createdTime: string;
+    recruitmentStateName: string;
 }
 
 interface HeadCell {
@@ -35,21 +34,21 @@ interface HeadCell {
 
 const headCells: HeadCell[] = [
     {
-        id: "title",
+        id: "recruitmentTitle",
         numeric: false,
         disablePadding: false,
         label: "Title",
         width: "30%"
     },
     {
-        id: "department",
+        id: "departmentName",
         numeric: false,
         disablePadding: false,
         label: "Department",
         width: "15%"
     },
     {
-        id: "reason",
+        id: "jobJustificationName",
         numeric: false,
         disablePadding: false,
         label: "Justification",
@@ -63,7 +62,7 @@ const headCells: HeadCell[] = [
         width: "40%"
     }, 
     {
-        id: "state",
+        id: "recruitmentStateName",
         numeric: false,
         disablePadding: false,
         label: "State",
@@ -76,7 +75,7 @@ export default function OthersRecruitmentTable() {
     const [filteredRows, setFilteredRows] = useState<readonly IRecruitmentData[]>([]);
     
     const [order, setOrder] = useState<Order>('desc');
-    const [orderBy, setOrderBy] = useState<keyof IRecruitmentData>('createdDateTime');
+    const [orderBy, setOrderBy] = useState<keyof IRecruitmentData>('createdTime');
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(15);
     
@@ -101,20 +100,20 @@ export default function OthersRecruitmentTable() {
         try { 
             setLoading(true);
 
-            const { data: jobRequisitions } = await getAllJobRequisitions(JobRequisitionFilter.Others);
+            const { data: recruitments } = await getAllRecruitments(RecruitmentFilter.Others);
 
-            const newRows = jobRequisitions.map(jr => ({
-                recruitmentId: jr.recruitmentId,
-                departmentId: jr.departmentId + "",
-                stateId: jr.recruitmentStateId,
+            const newRows: IRecruitmentData[] = recruitments.map(recruitment => ({
+                recruitmentId: recruitment.recruitmentId,
+                departmentId: recruitment.departmentId + "",
+                recruitmentStateId: recruitment.recruitmentStateId,
 
-                title: jr.positionTitle,
-                department: jr.departmentName,
-                numberOfApplicant: jr.numberOfPosition,
-                reason: jr.requisitionReasonName,
-                state: jr.recruitmentStateName,
-                createdDateTime: jr.createdDateTime.toLocaleString(),
-                description: jr.description,
+                recruitmentTitle: recruitment.recruitmentTitle,
+                departmentName: recruitment.departmentName,
+                numberOfApplicant: recruitment.numberOfApplicant,
+                jobJustificationName: recruitment.jobJustificationName,
+                recruitmentStateName: recruitment.recruitmentStateName,
+                createdTime: recruitment.createdTime.toLocaleString(),
+                description: recruitment.description,
             }));
 
             setRows(newRows);
@@ -137,8 +136,8 @@ export default function OthersRecruitmentTable() {
     const handleFilter = () => {
         const newFilteredRows = rows.filter(row => {
             const isSameDapartment = departmentId ? row.departmentId == departmentId : true;
-            const isStartDateOk = startDate ? startDate.toDate() <= new Date(row.createdDateTime) : true; 
-            const isEndDateOk = endDate ? endDate.toDate() >= new Date(row.createdDateTime) : true;
+            const isStartDateOk = startDate ? startDate.toDate() <= new Date(row.createdTime) : true; 
+            const isEndDateOk = endDate ? endDate.toDate() >= new Date(row.createdTime) : true;
 
             if (isSameDapartment && isStartDateOk && isEndDateOk)
                 return true;
@@ -200,14 +199,14 @@ export default function OthersRecruitmentTable() {
                                         id={labelId}
                                         scope="row"
                                     >
-                                        <Link href={`recruitments/${row.recruitmentId}`}>{row.title}</Link>
+                                        <Link href={`recruitments/${row.recruitmentId}`}>{row.recruitmentTitle}</Link>
                                     </TableCell>
-                                    <TableCell align="left">{row.department}</TableCell>
-                                    <TableCell align="left">{row.reason}</TableCell>
+                                    <TableCell align="left">{row.departmentName}</TableCell>
+                                    <TableCell align="left">{row.jobJustificationName}</TableCell>
                                     <TableCell align="left">{row.description}</TableCell>
                                     <TableCell align="left">
-                                        <RecruitmentStateChip stateId={row.stateId}>
-                                        {row.state}
+                                        <RecruitmentStateChip stateId={row.recruitmentStateId}>
+                                        {row.recruitmentStateName}
                                         </RecruitmentStateChip>
                                     </TableCell>
                                 </TableRow>

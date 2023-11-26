@@ -76,6 +76,10 @@ function LoginSection() {
             localStorage.setItem('accessToken', accessToken);
             localStorage.setItem('refreshToken', refreshToken);
             localStorage.setItem('fullName', fullName);
+            setAlert({
+                severity: "success",
+                message: "Login successfully!"
+            });
             router.push("/dashboard");
         }
         catch (error) {

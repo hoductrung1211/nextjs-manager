@@ -3,19 +3,19 @@ import { Checkbox, Table, TableBody, TableCell, TableContainer, TableHead, Table
 import EnhancedTableToolbar from "./RecruitmentTableToolbar";
 import React, { useEffect, useMemo, useState } from "react"; 
 import { Order, getComparator, stableSort } from "@/utils/functions/sort";
+import { RecruitmentFilter, getAllRecruitments } from "@/apis/recruitments";
 import Link from "next/link";
 import EnhancedTableHeadCheckbox from "@/components/mui/EnhancedTableHeadCheckbox";
-import { JobRequisitionFilter, getAllJobRequisitions } from "@/apis/jobRequisitions";
 import useLoadingAnimation from "@/hooks/useLoadingAnimation";
 import RecruitmentContainer from "../RecruitmentContainer";
 
 interface IRecruitmentData {
-    id: number;
-    title: string;
-    department: string;
-    reason: string;
+    recruitmentId: number;
+    recruitmentTitle: string;
+    departmentName: string;
+    jobJustificationName: string;
     numberOfPosition: number;
-    creator: string;
+    creatorName: string;
     createdTime: string;
 }
 
@@ -29,21 +29,21 @@ interface HeadCell {
 
 const headCells: HeadCell[] = [ 
     {
-        id: "title",
+        id: "recruitmentTitle",
         numeric: false,
         disablePadding: true,
         label: "Title",
         width: "25%"
     },
     {
-        id: "department",
+        id: "departmentName",
         numeric: false,
         disablePadding: false,
         label: "Department",
         width: "15%"
     },
     {
-        id: "reason",
+        id: "jobJustificationName",
         numeric: false,
         disablePadding: false,
         label: "Justification",
@@ -57,7 +57,7 @@ const headCells: HeadCell[] = [
         width: "20%"
     },
     {
-        id: "creator",
+        id: "creatorName",
         numeric: false,
         disablePadding: false,
         label: "Creator",
@@ -76,7 +76,7 @@ export default function WaitingRecruitmentTable() {
     const [rows, setRows] = useState<IRecruitmentData[]>([]);
     
     const [order, setOrder] = useState<Order>('desc');
-    const [orderBy, setOrderBy] = useState<keyof IRecruitmentData>('id');
+    const [orderBy, setOrderBy] = useState<keyof IRecruitmentData>('recruitmentId');
     const [selected, setSelected] = React.useState<readonly number[]>([]);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(15);
@@ -99,17 +99,18 @@ export default function WaitingRecruitmentTable() {
     async function fetchRecruitments() {
         try {
             setLoading(true);
-
-            const { data: jobRequisitions } = await getAllJobRequisitions(JobRequisitionFilter.WaitingToReview);
-
-            const newRows: IRecruitmentData[] = jobRequisitions.map(jr => ({
-                id: jr.recruitmentId,
-                title: jr.positionTitle,
-                department: jr.departmentName,
-                numberOfPosition: jr.numberOfPosition,
-                reason: jr.requisitionReasonName,
-                creator: jr.hrName,
-                createdTime: jr.createdDateTime.toLocaleString(),
+            console.log("begin");
+            
+            const { data: recruitments } = await getAllRecruitments(RecruitmentFilter.WaitingToReview);
+            
+            const newRows: IRecruitmentData[] = recruitments.map(recruitment => ({
+                recruitmentId: recruitment.recruitmentId,
+                recruitmentTitle: recruitment.recruitmentTitle,
+                departmentName: recruitment.departmentName,
+                numberOfPosition: recruitment.numberOfPosition,
+                jobJustificationName: recruitment.jobJustificationName,
+                creatorName: recruitment.creatorName,
+                createdTime: recruitment.createdTime.toLocaleString(),
             }));
 
             setRows(newRows);
@@ -124,7 +125,7 @@ export default function WaitingRecruitmentTable() {
 
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.checked) {
-            const newSelected = rows.map(n => n.id);
+            const newSelected = rows.map(n => n.recruitmentId);
             setSelected(newSelected);
         }
         else {
@@ -189,16 +190,16 @@ export default function WaitingRecruitmentTable() {
 
                     <TableBody>
                         {visibleRows.map((row, index) => {
-                            const isItemSelected = isSelected(row.id);
+                            const isItemSelected = isSelected(row.recruitmentId);
                             const labelId = `enhanced-table-checkbox-${index}`;
 
                             return (
-                                <TableRow hover className="h-fit" key={row.id}>
+                                <TableRow hover className="h-fit" key={row.recruitmentId}>
                                     <TableCell padding="checkbox">
                                         <Checkbox
                                             color="primary"
                                             checked={isItemSelected}
-                                            onClick={(event) => handleClickCheckbox(event, row.id)}
+                                            onClick={(event) => handleClickCheckbox(event, row.recruitmentId)}
                                             inputProps={{
                                                 'aria-labelledby': labelId,
                                             }}
@@ -210,12 +211,12 @@ export default function WaitingRecruitmentTable() {
                                         scope="row"
                                         padding="none"
                                     >
-                                        <Link href={`recruitments/${row.id}/review`}>{row.title}</Link>
+                                        <Link href={`recruitments/${row.recruitmentId}/review`}>{row.recruitmentTitle}</Link>
                                     </TableCell>
-                                    <TableCell align="left">{row.department}</TableCell>
-                                    <TableCell align="left">{row.reason}</TableCell>
+                                    <TableCell align="left">{row.departmentName}</TableCell>
+                                    <TableCell align="left">{row.jobJustificationName}</TableCell>
                                     <TableCell align="right">{row.numberOfPosition}</TableCell>
-                                    <TableCell align="left">{row.creator}</TableCell>
+                                    <TableCell align="left">{row.creatorName}</TableCell>
                                     <TableCell align="right">{row.createdTime.slice(0, 10)}</TableCell>
                                 </TableRow>
                             )

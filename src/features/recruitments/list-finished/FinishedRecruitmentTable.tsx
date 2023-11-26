@@ -4,21 +4,21 @@ import React, { useEffect, useMemo, useState } from "react";
 import EnhancedTableHead from "../../../components/mui/EnhancedTableHead";
 import { Order, getComparator, stableSort } from "@/utils/functions/sort";
 import Link from "next/link";
+import { RecruitmentFilter, getAllRecruitments } from "@/apis/recruitments";
 import EnhancedTableToolbar from "../EnhancedTableToolbar";
 import { Dayjs } from "dayjs";
-import { JobRequisitionFilter, getAllJobRequisitions } from "@/apis/jobRequisitions";
 import useLoadingAnimation from "@/hooks/useLoadingAnimation";
 import RecruitmentContainer from "../RecruitmentContainer";
 
 interface IRecruitmentData {
     recruitmentId: number;
     departmentId: string;
-    stateId: number;
+    recruitmentStateId: number;
 
-    title: string;
-    department: string;
-    reason: string;
-    hiredNumber: number;
+    recruitmentTitle: string;
+    departmentName: string;
+    jobJustificationName: string;
+    numberOfHiredApplicant: number;
     finishedTime: string;
 }
 
@@ -32,28 +32,28 @@ interface HeadCell {
 
 const headCells: HeadCell[] = [
     {
-        id: "title",
+        id: "recruitmentTitle",
         numeric: false,
         disablePadding: false,
         label: "Title",
         width: "30%"
     },
     {
-        id: "department",
+        id: "departmentName",
         numeric: false,
         disablePadding: false,
         label: "Department",
         width: "20%"
     },
     {
-        id: "reason",
+        id: "jobJustificationName",
         numeric: false,
         disablePadding: false,
         label: "Justification",
         width: "15%"
     },
     {
-        id: "hiredNumber",
+        id: "numberOfHiredApplicant",
         numeric: true,
         disablePadding: false,
         label: "Hired Number",
@@ -99,18 +99,19 @@ export default function FinishedRecruitmentTable() {
     async function fetchRecruitments() {
         try { 
             setLoading(true);
-            const { data: jobRequisitions } = await getAllJobRequisitions(JobRequisitionFilter.Finished);
+            const { data: recruitments } = await getAllRecruitments(RecruitmentFilter.Finished);
 
-            const newRows: IRecruitmentData[] = jobRequisitions.map(jr => ({
-                recruitmentId: jr.recruitmentId,
-                stateId: jr.recruitmentStateId,
-                departmentId: jr.departmentId + "",
-
-                title: jr.positionTitle,
-                department: jr.departmentName,
-                finishedTime: jr.createdDateTime.toLocaleString(),
-                hiredNumber: jr.numberOfPosition,
-                reason: jr.requisitionReasonName,
+            const newRows: IRecruitmentData[] = recruitments.map(recruitment => ({
+                recruitmentId: recruitment.recruitmentId,
+                stateId: recruitment.recruitmentStateId,
+                departmentId: recruitment.departmentId + "",
+                recruitmentStateId: recruitment.recruitmentStateId,
+                
+                recruitmentTitle: recruitment.recruitmentTitle,
+                departmentName: recruitment.departmentName,
+                jobJustificationName: recruitment.jobJustificationName,
+                finishedTime: recruitment.createdTime.toLocaleString(),
+                numberOfHiredApplicant: recruitment.numberOfPosition,
             }));
 
             setRows(newRows);
@@ -198,11 +199,11 @@ export default function FinishedRecruitmentTable() {
                                         id={labelId}
                                         scope="row"
                                     >
-                                        <Link href={`recruitments/${row.recruitmentId}`}>{row.title}</Link>
+                                        <Link href={`recruitments/${row.recruitmentId}`}>{row.recruitmentTitle}</Link>
                                     </TableCell>
-                                    <TableCell align="left">{row.department}</TableCell>
-                                    <TableCell align="left">{row.reason}</TableCell>
-                                    <TableCell align="right">{row.hiredNumber}</TableCell>
+                                    <TableCell align="left">{row.departmentName}</TableCell>
+                                    <TableCell align="left">{row.jobJustificationName}</TableCell>
+                                    <TableCell align="right">{row.numberOfHiredApplicant}</TableCell>
                                     <TableCell align="left">{row.finishedTime.slice(0, 10)}</TableCell>
                                 </TableRow>
                             )

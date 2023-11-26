@@ -1,4 +1,5 @@
 'use client';
+import { ISkill } from "@/apis/masterData";
 import { CustomTabPanel } from "@/components/mui/Tab";
 import CreateDescription from "@/features/recruitments/create/CreateDescription"; 
 import CreateRequisition from "@/features/recruitments/create/CreateRequisition";
@@ -23,11 +24,11 @@ export default function Page() {
     const [qualificationId, setQualificationId] = useState("");
     const [contractTypeId, setContractTypeId] = useState("");
     const [workSiteId, setWorkSiteId] = useState("");
-    const [skillIds, setSkillIds] = useState<number[]>([]); 
+    const [selectedSkills, setSelectedSkills] = useState<ISkill[]>([]); 
     const [minSalary, setMinSalary] = useState("");
     const [maxSalary, setMaxSalary] = useState("");
 
-    const [activeStep, setActiveStep] = useState(1);
+    const [activeStep, setActiveStep] = useState(0);
     const setAlert = useAlert();
 
     const handleNext = () => {
@@ -35,7 +36,9 @@ export default function Page() {
             setAlert({
                 message: "Create Recruitment successfully!",
                 severity: "success"
-            })
+            });
+            sendDataToServer();
+
             return;
         }
         setActiveStep(prevActiveStep => prevActiveStep + 1);
@@ -43,6 +46,25 @@ export default function Page() {
 
     const handleBack = () => {
         setActiveStep(prevActiveStep => prevActiveStep - 1);
+    }
+
+    function sendDataToServer() {
+        const data = {
+            title,
+            departmentId,
+            numberOfPosition,
+            startDate,
+            reasonId,
+            roleId,
+            qualificationId,
+            contractTypeId,
+            workSiteId,
+            selectedSkills,
+            minSalary,
+            maxSalary
+        };
+
+        alert(JSON.stringify(data));
     }
 
     return (
@@ -110,8 +132,13 @@ export default function Page() {
                                 workSiteId={workSiteId}
                                 onChangeWorkSite={e => setWorkSiteId(e.target.value)}
 
-                                skillIds={skillIds}
-                                
+                                selectedSkills={selectedSkills}
+                                onChangeSelectedSkills={e => {
+                                    const value = e.target.value;
+                                    if (typeof value != 'string') {
+                                        setSelectedSkills(value);
+                                    } 
+                                }}
 
                                 minSalary={minSalary}
                                 onChangeMinSalary={e => {

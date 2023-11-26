@@ -53,7 +53,9 @@ const config: Config = {
         "midnight-blue": "#2c3e50",
         "orange": "#f39c12",
         "pumpkin": "#d35400",
-        "pomegranate": "#c0392b"
+        "pomegranate": "#c0392b",
+        "asbestos": "#7f8c8d",
+        "wet-asphalt": "#34495e"
       },
       backdropBlur: {
         'xs': '2px'

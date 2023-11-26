@@ -2,10 +2,11 @@
 import BreadcrumbHeader from "@/layouts/BreadcrumbHeader";
 import MainContentContainer from "@/layouts/MainContentContainer";
 import { CustomTabPanel } from "@/components/mui/Tab";
-import { Tab, Tabs, Typography } from "@mui/material";
+import { Chip, Tab, Tabs, Typography } from "@mui/material";
 import Link from "next/link";
 import { useState } from "react";
-import RecruitmentBasicInfo from "@/features/recruitments/detail-basic-info/RecruitmentDetail";
+import RecruitmentBasicInfo from "@/features/recruitments/info-detail-basic/RecruitmentDetail";
+import TabChip from "@/components/TabChip";
 
 export default function Page() {
     const [tabValue, setTabValue] = useState<0 | 1>(0);
@@ -14,7 +15,7 @@ export default function Page() {
         setTabValue(newValue);
     }
     return (
-        <div className="w-full h-screen flex flex-col rounded-xl overflow-hidden">
+        <div className="w-full h-screen flex flex-col rounded-xl overflow-auto">
             <BreadcrumbHeader>
                 <Link href="/">
                     Home
@@ -27,14 +28,23 @@ export default function Page() {
 
             <MainContentContainer>
                 <Tabs
+                    className="sticky top-0 bg-neutral-100 z-10"
                     value={tabValue}
                     onChange={handleChangeTab}
                     aria-label="basic tabs example"
                 >
-                    <Tab label="Basic Information" id="simple-tab-0" aria-controls="simple-tabpanel-0" />
-                    <Tab label="Job Posting" id="simple-tab-1" aria-controls="simple-tabpanel-1" />
-                    <Tab label="Interviews" id="simple-tab-2" aria-controls="simple-tabpanel-2" />
-                    <Tab label="Candidates" id="simple-tab-3" aria-controls="simple-tabpanel-3" />
+                    <Tab label="Basic Information" id="recruitment-tab-0" aria-controls="recruitment-tabpanel-0" />
+                    <Tab label="Job Posting" id="recruitment-tab-1" aria-controls="recruitment-tabpanel-1" />
+                    <Tab label="Interviews" id="recruitment-tab-2" aria-controls="recruitment-tabpanel-2" />
+                    <Tab
+                        id="recruitment-tab-3"
+                        aria-controls="recruitment-tabpanel-3"
+                        className="h-[48px]"
+                        icon={
+                            <TabChip label="Candidates">3</TabChip>
+                        }
+                        iconPosition="end"
+                    />
                 </Tabs>
                 <CustomTabPanel value={tabValue} index={0}>
                     <RecruitmentBasicInfo />

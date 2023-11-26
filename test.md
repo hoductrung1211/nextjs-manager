@@ -1,0 +1,15 @@
+- Phieu Diem ID
+- Tieu chi ID
+- Tieu chi con ID
+- Diem 1 
+- Diem 2
+- Diem 3
+=========================
+- Phieu diem ID
+    - Tieu Chi[]
+        - Tieu chi ID
+        - Tieu chi con[]
+            - Tieu chi con ID
+            - Diem 1
+            - Diem 2
+            - Diem 3

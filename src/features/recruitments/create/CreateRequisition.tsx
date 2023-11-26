@@ -83,8 +83,8 @@ export default function CreateRequisition({
                         <em>None</em>
                     </MenuItem>
                     {departments.map(d => (
-                        <MenuItem value={d.id}>
-                            {d.name}
+                        <MenuItem value={d.departmentId}>
+                            {d.departmentName}
                         </MenuItem>
                     ))}
                 </Select>

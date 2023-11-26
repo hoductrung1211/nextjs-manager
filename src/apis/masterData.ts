@@ -4,8 +4,8 @@ const axios = configuredAxios.create();
 const baseURL = "contractTypes";
 
 export interface IContractType {
-    id: number;
-    name: string;
+    contractTypeId: number;
+    contractTypeName: string;
 }
 export const getAllContractTypes = () => {
     return axios.get<IContractType[]>(baseURL);
@@ -17,8 +17,8 @@ export const getContractTypeById = (id: number) => {
 
 
 export interface IDepartment {
-    id: number;
-    name: string;
+    departmentId: number;
+    departmentName: string;
     description: string;
 }
 export const getAllDepartments = () => {
@@ -31,8 +31,8 @@ export const getDepartmentById = (id: number) => {
 
 
 export interface IEmployeeRoleType {
-    id: number;
-    name: string; 
+    employeeRoleTypeId: number;
+    employeeRoleTypeName: string; 
 }
 export const getAllEmployeeRoleTypes = () => {
     return axios.get<IEmployeeRoleType[]>("employeeRoleTypes");
@@ -44,9 +44,9 @@ export const getEmployeeRoleTypeById = (id: number) => {
 
 
 export interface IExperience {
-    id: number;
-    name: string;
-    value: number;
+    experienceId: number;
+    experienceName: string;
+    experienceValue: number;
 }
 export const getAllExperiences = () => {
     return axios.get<IExperience[]>("experiences");
@@ -58,9 +58,9 @@ export const getExperienceById = (id: number) => {
 
 
 export interface IQualification {
-    id: number;
-    name: string;
-    value: number;
+    qualificationId: number;
+    qualificationName: string;
+    qualificationValue: number;
 }
 export const getAllQualifications = () => {
     return axios.get<IQualification[]>("qualifications");
@@ -85,8 +85,8 @@ export const getRequisitionReasonById = (id: number) => {
 
 
 export interface ISkillCategory {
-    id: number;
-    name: string; 
+    skillCategoryId: number;
+    skillCategoryName: string; 
 }
 export const getAllSkillCategories = () => {
     return axios.get<ISkillCategory[]>("skillCategories");
@@ -112,8 +112,8 @@ export const getSkillById = (id: number) => {
 
 
 export interface IWorkSite {
-    id: number;
-    name: string;
+    workSiteId: number;
+    workSiteName: string;
 }
 export const getAllWorkSites = () => {
     return axios.get<IWorkSite[]>("workSites");

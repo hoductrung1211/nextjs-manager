@@ -1,7 +1,6 @@
 'use client';
 import { IContractType, IEmployeeRoleType, IQualification, ISkill, IWorkSite, getAllContractTypes, getAllEmployeeRoleTypes, getAllQualifications, getAllSkills, getAllWorkSites } from "@/apis/masterData";
 import useLoadingAnimation from "@/hooks/useLoadingAnimation";
-import { useTheme } from "@emotion/react";
 import { Box, Chip, FormControl, FormControlLabel, FormLabel,  InputAdornment, InputLabel, MenuItem, OutlinedInput, Radio, RadioGroup, Select, SelectChangeEvent, TextField, Theme, } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
 
@@ -18,7 +17,8 @@ export interface ICreateDescriptionProps {
   workSiteId: string;
   onChangeWorkSite: (e: SelectChangeEvent) => void;
 
-  skillIds: number[];
+  selectedSkills: ISkill[];
+  onChangeSelectedSkills: (e: SelectChangeEvent<ISkill[]>) => void;
 
   minSalary: string;
   onChangeMinSalary: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -36,7 +36,8 @@ export default function CreateDescription({
   onChangeContractType,
   workSiteId,
   onChangeWorkSite,
-  skillIds,
+  selectedSkills,
+  onChangeSelectedSkills: onChangeSelectedSkills,
   minSalary,
   onChangeMinSalary,
   maxSalary,
@@ -69,8 +70,6 @@ export default function CreateDescription({
       setContractTypes(contractTypesRes);
       setWorkSites(workSitesRes);
       setSkills(skillsRes);
-
-      console.log(skills)
     }
     catch (ex) {
       console.log(ex);
@@ -94,7 +93,7 @@ export default function CreateDescription({
             <em>None</em>
           </MenuItem>
           {roles.map(r => (
-            <MenuItem value={r.id}>{r.name}</MenuItem>
+            <MenuItem value={r.employeeRoleTypeId}>{r.employeeRoleTypeName}</MenuItem>
           ))}
         </Select>
       </FormControl>
@@ -111,7 +110,7 @@ export default function CreateDescription({
             <em>None</em>
           </MenuItem>
           {qualifications.map(q => (
-            <MenuItem value={q.id}>{q.name}</MenuItem>
+            <MenuItem value={q.qualificationId}>{q.qualificationName}</MenuItem>
           ))}
         </Select>
       </FormControl>
@@ -126,7 +125,7 @@ export default function CreateDescription({
           onChange={onChangeContractType}
         >
           {contractTypes.map(c => (
-            <FormControlLabel value={c.id} control={<Radio />} label={c.name} />
+            <FormControlLabel value={c.contractTypeId} control={<Radio />} label={c.contractTypeName} />
           ))}
         </RadioGroup>
       </FormControl>
@@ -141,12 +140,16 @@ export default function CreateDescription({
           onChange={onChangeWorkSite}
         >
           {workSites.map(w => (
-            <FormControlLabel value={w.id} control={<Radio />} label={w.name} />
+            <FormControlLabel value={w.workSiteId} control={<Radio />} label={w.workSiteName} />
           ))}
         </RadioGroup>
       </FormControl>
 
-      <MultipleSelectSkillsChip skills={skills} />
+      <MultipleSelectSkillsChip
+        skills={skills}
+        selectedSkills={selectedSkills}
+        onChangeSelectedSkills={onChangeSelectedSkills}
+      />
     
       <div className="flex gap-5">
         <TextField
@@ -180,37 +183,20 @@ const MenuProps = {
   PaperProps: {
     style: {
       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      minWidth: 250,
     },
   },
-}; 
-
-function getStyles(name: string, personName: readonly string[], theme: Theme) {
-  return {
-    fontWeight:
-      personName.indexOf(name) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
-  };
-}
+};
 
 function MultipleSelectSkillsChip({
-  skills
+  skills,
+  selectedSkills,
+  onChangeSelectedSkills 
 }: {
-  skills: ISkill[]
+  skills: ISkill[],
+  selectedSkills: ISkill[],
+  onChangeSelectedSkills: (event: SelectChangeEvent<ISkill[]>) => void;
 }) {
-  const theme = useTheme();
-  const [selectedSkills, setSelectedSkills] =  useState<string[]>([]);
-  console.log(skills);
-
-  const handleChange = (event: SelectChangeEvent<typeof selectedSkills>) => {
-    const {
-      target: { value },
-    } = event;
-    setSelectedSkills(
-      typeof value === 'string' ? value.split(',') : value,
-    );
-  }; 
+ 
 
   return (
     <div>
@@ -221,22 +207,21 @@ function MultipleSelectSkillsChip({
           id="skill-chip"
           multiple
           value={selectedSkills}
-          onChange={handleChange}
+          onChange={onChangeSelectedSkills}
           input={<OutlinedInput id="select-skill-chip" label="Chip" />}
           renderValue={(selected) => (
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-              {selected.map((value) => (
-                <Chip key={value} label={value} />
+              {selected.map((skill) => (
+                <Chip key={skill.skillId} label={skill.skillName} />
               ))}
             </Box>
           )}
           MenuProps={MenuProps}
         >
           {skills.map((skill) => (
-            <MenuItem
+            <MenuItem // TODO: Change this from ISkill type into string (skill ID)
               key={skill.skillId}
-              value={skill.skillId}
-              style={getStyles(skill.skillId + "", selectedSkills, theme)}
+              value={skill}
             >
               {skill.skillName}
             </MenuItem>
