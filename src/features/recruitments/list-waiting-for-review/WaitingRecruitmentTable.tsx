@@ -1,13 +1,13 @@
 'use client';
-import { Checkbox, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from "@mui/material";
+import { Checkbox, Table, TableBody, TableCell, TableContainer,  TablePagination, TableRow } from "@mui/material";
 import EnhancedTableToolbar from "./RecruitmentTableToolbar";
 import React, { useEffect, useMemo, useState } from "react"; 
 import { Order, getComparator, stableSort } from "@/utils/functions/sort";
-import { RecruitmentFilter, getAllRecruitments } from "@/apis/recruitments";
 import Link from "next/link";
 import EnhancedTableHeadCheckbox from "@/components/mui/EnhancedTableHeadCheckbox";
 import useLoadingAnimation from "@/hooks/useLoadingAnimation";
 import RecruitmentContainer from "../RecruitmentContainer";
+import { getWaitingToReviewRecruitments } from "@/apis/recruitments/recruitments";
 
 interface IRecruitmentData {
     recruitmentId: number;
@@ -32,42 +32,42 @@ const headCells: HeadCell[] = [
         id: "recruitmentTitle",
         numeric: false,
         disablePadding: true,
-        label: "Title",
-        width: "25%"
+        label: "Tiêu đề",
+        width: "20%"
     },
     {
         id: "departmentName",
         numeric: false,
         disablePadding: false,
-        label: "Department",
+        label: "Phòng ban",
         width: "15%"
     },
     {
         id: "jobJustificationName",
         numeric: false,
         disablePadding: false,
-        label: "Justification",
-        width: "10%"
+        label: "Lý do",
+        width: "20%"
     },
     {
         id: "numberOfPosition",
         numeric: true,
         disablePadding: false,
-        label: "Number Of Position",
-        width: "20%"
+        label: "Số lượng tuyển dụng",
+        width: "17%"
     },
     {
         id: "creatorName",
         numeric: false,
         disablePadding: false,
-        label: "Creator",
+        label: "Người tạo",
         width: "15%"
     }, 
     {
         id: "createdTime",
         numeric: true,
         disablePadding: false,
-        label: "Created Time",
+        label: "Thời gian tạo",
         width: "15%"
     }, 
 ];
@@ -99,18 +99,17 @@ export default function WaitingRecruitmentTable() {
     async function fetchRecruitments() {
         try {
             setLoading(true);
-            console.log("begin");
             
-            const { data: recruitments } = await getAllRecruitments(RecruitmentFilter.WaitingToReview);
+            const { data: recruitments } = await getWaitingToReviewRecruitments();
             
             const newRows: IRecruitmentData[] = recruitments.map(recruitment => ({
                 recruitmentId: recruitment.recruitmentId,
                 recruitmentTitle: recruitment.recruitmentTitle,
-                departmentName: recruitment.departmentName,
+                departmentName: recruitment.department.departmentName,
                 numberOfPosition: recruitment.numberOfPosition,
-                jobJustificationName: recruitment.jobJustificationName,
+                jobJustificationName: recruitment.jobJustification.jobJustificationName,
                 creatorName: recruitment.creatorName,
-                createdTime: recruitment.createdTime.toLocaleString(),
+                createdTime: recruitment.createdDateTime.toLocaleString(),
             }));
 
             setRows(newRows);

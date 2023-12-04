@@ -4,7 +4,7 @@ import EnhancedTableToolbar from "../EnhancedTableToolbar";
 import React, { useEffect, useMemo, useState } from "react";
 import EnhancedTableHead from "@/components/mui/EnhancedTableHead";
 import { Order, getComparator, stableSort } from "@/utils/functions/sort";
-import { RecruitmentFilter, getAllRecruitments } from "@/apis/recruitments";
+import { getOtherRecruitments } from "@/apis/recruitments/recruitments";
 import Link from "next/link";
 import  { Dayjs } from "dayjs";
 import useLoadingAnimation from "@/hooks/useLoadingAnimation";
@@ -20,7 +20,7 @@ interface IRecruitmentData {
     departmentName: string;
     jobJustificationName: string;
     description: string;
-    createdTime: string;
+    createdDateTime: string;
     recruitmentStateName: string;
 }
 
@@ -37,36 +37,36 @@ const headCells: HeadCell[] = [
         id: "recruitmentTitle",
         numeric: false,
         disablePadding: false,
-        label: "Title",
+        label: "Tiêu đề",
         width: "30%"
     },
     {
         id: "departmentName",
         numeric: false,
         disablePadding: false,
-        label: "Department",
+        label: "Phòng ban",
         width: "15%"
     },
     {
         id: "jobJustificationName",
         numeric: false,
         disablePadding: false,
-        label: "Justification",
+        label: "Lý do",
         width: "10%"
     },
     {
         id: "description",
         numeric: false,
         disablePadding: false,
-        label: "Description",
-        width: "40%"
+        label: "Chú thích",
+        width: "35%"
     }, 
     {
         id: "recruitmentStateName",
         numeric: false,
         disablePadding: false,
-        label: "State",
-        width: "10%"
+        label: "Trạng thái",
+        width: "15%"
     },
 ];
  
@@ -75,7 +75,7 @@ export default function OthersRecruitmentTable() {
     const [filteredRows, setFilteredRows] = useState<readonly IRecruitmentData[]>([]);
     
     const [order, setOrder] = useState<Order>('desc');
-    const [orderBy, setOrderBy] = useState<keyof IRecruitmentData>('createdTime');
+    const [orderBy, setOrderBy] = useState<keyof IRecruitmentData>('createdDateTime');
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(15);
     
@@ -100,19 +100,19 @@ export default function OthersRecruitmentTable() {
         try { 
             setLoading(true);
 
-            const { data: recruitments } = await getAllRecruitments(RecruitmentFilter.Others);
+            const { data: recruitments } = await getOtherRecruitments();
 
             const newRows: IRecruitmentData[] = recruitments.map(recruitment => ({
                 recruitmentId: recruitment.recruitmentId,
-                departmentId: recruitment.departmentId + "",
-                recruitmentStateId: recruitment.recruitmentStateId,
+                departmentId: recruitment.department.departmentId + "",
+                recruitmentStateId: recruitment.recruitmentState.recruitmentStateId,
 
                 recruitmentTitle: recruitment.recruitmentTitle,
-                departmentName: recruitment.departmentName,
-                numberOfApplicant: recruitment.numberOfApplicant,
-                jobJustificationName: recruitment.jobJustificationName,
-                recruitmentStateName: recruitment.recruitmentStateName,
-                createdTime: recruitment.createdTime.toLocaleString(),
+                departmentName: recruitment.department.departmentName,
+                numberOfApplicant: 1, // TODO
+                jobJustificationName: recruitment.jobJustification.jobJustificationName,
+                recruitmentStateName: recruitment.recruitmentState.recruitmentStateName,
+                createdDateTime: recruitment.createdDateTime.toLocaleString(),
                 description: recruitment.description,
             }));
 
@@ -136,8 +136,8 @@ export default function OthersRecruitmentTable() {
     const handleFilter = () => {
         const newFilteredRows = rows.filter(row => {
             const isSameDapartment = departmentId ? row.departmentId == departmentId : true;
-            const isStartDateOk = startDate ? startDate.toDate() <= new Date(row.createdTime) : true; 
-            const isEndDateOk = endDate ? endDate.toDate() >= new Date(row.createdTime) : true;
+            const isStartDateOk = startDate ? startDate.toDate() <= new Date(row.createdDateTime) : true; 
+            const isEndDateOk = endDate ? endDate.toDate() >= new Date(row.createdDateTime) : true;
 
             if (isSameDapartment && isStartDateOk && isEndDateOk)
                 return true;

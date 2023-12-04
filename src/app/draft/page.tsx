@@ -1,7 +1,22 @@
 'use client';
-import TestChip from "./Chip"; 
-export default function Page() {
-    return (
-        <TestChip /> 
-    )
+import { Navigation } from "@/configs/sidebarNavigation";
+import LayoutContainer from "@/layouts/LayoutContainer";
+
+export default function Home() { 
+  return (
+    <LayoutContainer
+      activeNav={Navigation.JobPostings}
+      breadcrumbs={[
+        {
+          text: "Home",
+          href:""
+        },
+        {
+          text: "Create",
+        }
+      ]}
+      >
+          1
+    </LayoutContainer>
+  )
 }

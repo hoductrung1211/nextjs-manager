@@ -1,56 +1,79 @@
-import Logo from "../components/Logo"
-import Nav, { NavGroup } from "../components/Nav";
-import { INavigation } from "../configs/sidebarNavigation";
-import Avatar from "@/components/Avatar";
+'use client';
+import Logo from "@/components/logo/Logo";
+import { Avatar, Drawer, IconButton } from "@mui/material";
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'; 
+import NavGroup from "./NavGroup";
+import { Navigation, constructionNavList, userNavList } from "@/configs/sidebarNavigation";
+import { useEffect, useState } from "react";
+
+export const drawerWidth = 260;
 
 export default function Sidebar({
-    children
+    open,
+    activeNav,
+    handleDrawerClose,
+    setActiveNav,
 }: {
-    children?: React.ReactNode
-    }) {
-    return (
-        <aside className="flex-shrink-0 w-68 h-screen flex flex-col border-r border-dashed ">
-            <div className="p-4 flex flex-col gap-4">
-                <Logo />
-            </div>
-            <nav className="grow px-2 pb-6 flex flex-col gap-4 overflow-y-auto text-sm font-semibold">
-                <div className="">
-                    <Avatar /> 
-                </div>
-                {children}
-            </nav>
-        </aside>
-    )
-}
-
-export function GenerateNav({
-    node,
-}: {
-    node: INavigation | INavigation[],
+        open: boolean;
+        activeNav: Navigation;
+        setActiveNav: (nav: Navigation) => void;
+    handleDrawerClose: () => void;
 }) {
-    if (Array.isArray(node)) {
-        return (
-            <>
-                {node.map(subNode => <GenerateNav key={subNode.text} node={subNode} />)}
-            </>
-        );
-    }
+    const [fullName, setFullName] = useState("");
+    const [role, setRole] = useState("");
 
-    if (node.children != undefined)
-        return (
-            <NavGroup text={node.text}>
-                <GenerateNav node={node.children} />
-            </NavGroup>
-        );
+    useEffect(() => {
+        if (localStorage) {
+            const name = localStorage.getItem("fullName");
+            name && setFullName(name);
+
+            const r = localStorage.getItem("role");
+            r && setRole(r);
+        }
+    }, []);
     
     return (
-        <Nav
-            id={node.id ?? -1}
-            icon={node.icon}
-            href={node.href}
-            onClick={node.onClick}
+        <Drawer
+            sx={{
+            width: drawerWidth,
+            flexShrink: 0,
+                '& .MuiDrawer-paper': {
+                    width: drawerWidth,
+                },
+            }}
+            variant="persistent"
+            anchor="left"
+            open={open}
         >
-            {node.text}
-        </Nav>
+            <aside className='h-full flex flex-col gap-2'>
+                <header className='h-16 px-3 flex justify-between items-center'>
+                    <Logo />
+                    <IconButton onClick={handleDrawerClose}>
+                    <ChevronLeftIcon />
+                    </IconButton>
+                </header>
+                <section className='h-16 px-3 flex'>
+                    <div className="w-full h-full px-5 flex items-center gap-5 bg-apple-gray-6 rounded-md hover:bg-apple-gray-5 cursor-pointer">
+                        <Avatar>{fullName?.[0]}</Avatar>
+                        <p className="flex flex-col">
+                            {fullName}
+                            <span className="text-xs font-bold text-apple-gray">{role}</span>
+                        </p>
+                    </div>
+                </section>
+                <NavGroup
+                    title="Tuyển dụng"
+                    activeNav={activeNav}
+                    navList={constructionNavList}
+                    onChangeActiveNav={setActiveNav}
+                />
+                <NavGroup
+                    title="Người dùng"
+                    activeNav={activeNav}
+                    navList={userNavList}
+                    onChangeActiveNav={setActiveNav}
+                />
+            </aside>
+      </Drawer>
     )
 }

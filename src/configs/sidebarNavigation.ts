@@ -1,60 +1,59 @@
-export interface INavigation {
-    id?: number,
-    text: string,
-    icon?: string,
-    children?: INavigation[],
-    href?: string,
-    onClick?: () => void
+import { INavProps } from "@/layouts/NavGroup";
+
+export const enum Navigation {
+    Recruitments,
+    JobPostings,
+    Candidates,
+    Interviews,
+    UserProfile,
+    Settings,
+    Logout
 }
 
-export const managerNavigations: INavigation[] = [
+export const constructionNavList : INavProps[] = [
     {
-        text: "Recruitment",
-        children: [
-            {
-                id: 1,
-                text: "Recruitments",
-                icon: "handshake-simple",
-                href: "/recruitments"
-            },
-            {
-                id: 2,
-                text: "Recruitment Posts",
-                icon: "newspaper",
-            },
-            {
-                id: 3,
-                text: "Candidates",
-                icon: "user-tie",
-            },
-            {
-                id: 4,
-                text: "Interviews",
-                icon: "comments",
-            },
-        ]
-    }, 
+        id: Navigation.Recruitments,
+        icon: "handshake-simple",
+        text: "Đợt tuyển dụng",
+        href: "/recruitments"
+    },
     {
-        text: "User",
-        children: [
-            {
-                id: 7,
-                text: "Profile",
-                icon: "circle-user",
-                href: "/profile",
-            },
-            {
-                id: 8,
-                text: "Change password",
-                icon: "key",
-                href: "/change-password",
-            },
-            {
-                id: 9,
-                text: "Log out",
-                icon: "right-from-bracket",
-                href: "/"
-            },
-        ]
+        id: Navigation.JobPostings,
+        icon: "newspaper",
+        text: "Bài đăng tuyển dụng",
+        href: "/job-postings"
+    },
+    {
+        id: Navigation.Candidates,
+        icon: "user-tie",
+        text: "Ứng viên",
+        href: "/candidates"
+    },
+    {
+        id: Navigation.Interviews,
+        icon: "comments",
+        text: "Buổi phỏng vấn",
+        href: "/interviews"
+    },
+];
+
+export const userNavList: INavProps[] = [
+    {
+        id: Navigation.UserProfile,
+        icon: "user",
+        text: "Hồ sơ cá nhân",
+        href: "/profile"
+    },
+    {
+        id: Navigation.Settings,
+        icon: "gear",
+        text: "Cài đặt",
+        href: "/settings"
+    },
+    {
+        id: Navigation.Logout,
+        icon: "right-from-bracket",
+        text: "Đăng xuất",
+        href: "/"
     },
 ]

@@ -1,197 +1,363 @@
-'use client';
-import { ISkill } from "@/apis/masterData";
+"use client";
+import { createRecruitment } from "@/apis/recruitments/recruitments";
 import { CustomTabPanel } from "@/components/mui/Tab";
-import CreateDescription from "@/features/recruitments/create/CreateDescription"; 
+import { Navigation } from "@/configs/sidebarNavigation";
+import CreateDescription from "@/features/recruitments/create/CreateDescription";
 import CreateRequisition from "@/features/recruitments/create/CreateRequisition";
 import useAlert from "@/hooks/useAlert";
-import BreadcrumbHeader from "@/layouts/BreadcrumbHeader";
+import useLoadingAnimation from "@/hooks/useLoadingAnimation"; 
 import MainContentContainer from "@/layouts/MainContentContainer";
-import {Button, SelectChangeEvent, Step, StepLabel, Stepper, Typography } from "@mui/material";
-import { Dayjs } from "dayjs";
-import Link from "next/link";
+import LayoutContainer from "@/layouts/LayoutContainer";
+import ISkill from "@/models/Skill";
+import {
+  Button,
+  SelectChangeEvent,
+  Step,
+  StepLabel,
+  Stepper,
+  Typography,
+} from "@mui/material";
+import dayjs, { Dayjs } from "dayjs"; 
+import { useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";
 
-const steps = ['Recruitment Requisition', 'Recruitment Description'];
+const steps = ["Đơn tuyển dụng", "Mô tả công việc"];
 
 export default function Page() {
-    const [title, setTitle] = useState("");
-    const [departmentId, setDepartmentId] = useState("");
-    const [numberOfPosition, setNumberOfPosition] = useState("");
-    const [startDate, setStartDate] = useState<Dayjs | null>(null);
-    const [reasonId, setReasonId] = useState("");
+  // Requisition
+  const [recruitmentTitle, setRecruitmentTitle] = useState("Reactjs Front-end Developer");
+  const [departmentId, setDepartmentId] = useState("6");
+  const [numberOfPosition, setNumberOfPosition] = useState("2");
+  const [startDate, setStartDate] = useState<Dayjs | null>(dayjs("2024-2-11"));
+  const [jobJustificationId, setJobJustificationId] = useState("1");
+  // const [selectedCriterias, setSelectedCriterias] = useState<string[]>([
+  //   "1",
+  //   "2",
+  //   "3",
+  // ]);
 
-    const [roleId, setRoleId] = useState("");
-    const [qualificationId, setQualificationId] = useState("");
-    const [contractTypeId, setContractTypeId] = useState("");
-    const [workSiteId, setWorkSiteId] = useState("");
-    const [selectedSkills, setSelectedSkills] = useState<ISkill[]>([]); 
-    const [minSalary, setMinSalary] = useState("");
-    const [maxSalary, setMaxSalary] = useState("");
+  // Requisition Error
+  const [isTitleError, setIsTitleError] = useState(false);
+  const [isDepartmentError, setIsDepartmentError] = useState(false);
+  const [isNumberOfPositionError, setIsNumberOfPositionError] = useState(false);
+  const [isStartDateError, setIsStartDateError] = useState(false);
+  const [isReasonError, setIsReasonError] = useState(false);
 
-    const [activeStep, setActiveStep] = useState(0);
-    const setAlert = useAlert();
+  // Description
+  const [eeRoleTypeId, setEeRoleTypeId] = useState("3");
+  const [qualificationId, setQualificationId] = useState("3");
+  const [contractTypeId, setContractTypeId] = useState("1");
+  const [experienceId, setExperienceId] = useState("1");
+  const [workSiteId, setWorkSiteId] = useState("1");
+  const [selectedSkills, setSelectedSkills] = useState<ISkill[]>([]);
+  const [minSalary, setMinSalary] = useState("7000");
+  const [maxSalary, setMaxSalary] = useState("9000");
 
-    const handleNext = () => {
-        if (activeStep == steps.length - 1) {
-            setAlert({
-                message: "Create Recruitment successfully!",
-                severity: "success"
-            });
-            sendDataToServer();
+  // Requisition Error
+  const [isRoleError, setIsRoleError] = useState(false);
+  const [isQualificationError, setIsQualificationError] = useState(false);
+  const [isContractTypeError, setIsContractTypeError] = useState(false);
+  const [isExperienceError, setExperienceError] = useState(false);
+  const [isWorkSiteError, setIsWorkSiteError] = useState(false);
+  const [isSkillsError, setIsSkillsError] = useState(false);
+  const [isMinSalaryError, setIsMinSalaryError] = useState(false);
+  const [isMaxSalaryError, setIsMaxSalaryError] = useState(false);
 
-            return;
-        }
-        setActiveStep(prevActiveStep => prevActiveStep + 1);
+  const [activeStep, setActiveStep] = useState(0);
+  const setAlert = useAlert();
+  const setLoading = useLoadingAnimation();
+  const router = useRouter();
+
+  const handleNext = () => {
+    if (activeStep == 0) {
+      if (validateRequisition())
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+      else {
+        setAlert({
+          message: "Please fill all text fields!",
+          severity: "error",
+        });
+      }
     }
 
-    const handleBack = () => {
-        setActiveStep(prevActiveStep => prevActiveStep - 1);
+    if (activeStep == steps.length - 1) {
+      if (validateDescription()) {
+        handleCreateRecruitment();
+      } else {
+        setAlert({
+          message: "Create Recruitment failed!",
+          severity: "error",
+        });
+      }
     }
+  };
 
-    function sendDataToServer() {
-        const data = {
-            title,
-            departmentId,
-            numberOfPosition,
-            startDate,
-            reasonId,
-            roleId,
-            qualificationId,
-            contractTypeId,
-            workSiteId,
-            selectedSkills,
-            minSalary,
-            maxSalary
-        };
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
 
-        alert(JSON.stringify(data));
-    }
+  const validateRequisition = (): boolean => {
+    const isTitleValid = recruitmentTitle.trim().length > 0;
+    const isDepartmentSelected = departmentId != "";
+    const isValidNumber = !Number.isNaN(Number.parseInt(numberOfPosition));
+    const isValidDate = startDate != null;
+    const isReasonSelected = jobJustificationId != "";
+
+    setIsTitleError(!isTitleValid);
+    setIsDepartmentError(!isDepartmentSelected);
+    setIsNumberOfPositionError(!isValidNumber);
+    setIsStartDateError(!isValidDate);
+    setIsReasonError(!isReasonSelected);
 
     return (
-        <div className="w-full h-screen flex flex-col overflow-hidden">
-            <BreadcrumbHeader>
-                <Link href="./">
-                    Home
-                </Link> 
-                <Link href="./">
-                    Recruitments
-                </Link> 
-                <Typography color="text.primary">Create</Typography>
-            </BreadcrumbHeader> 
-            <MainContentContainer>
-                <Stepper className="mx-auto h-14 flex gap-8" activeStep={activeStep}>
-                {steps.map(label => {
-                    const stepProps: { completed?: boolean } = {};
-                    const labelProps: { optional?: React.ReactNode } = {};
+      isTitleValid &&
+      isDepartmentSelected &&
+      isValidNumber &&
+      isValidDate &&
+      isReasonSelected
+    );
+  };
 
-                    return (
-                        <Step key={label} {...stepProps}>
-                            <StepLabel {...labelProps}>{label}</StepLabel>
-                        </Step>
-                    )
-                })}
-                </Stepper>
-            
-                <section className="mt-2 flex justify-between p-6 gap-10 bg-gray-50 rounded-lg">
-                    <main className="flex-shrink-0 w-1/2">
-                        <CustomTabPanel index={0} value={activeStep}>
-                            <CreateRequisition
-                                title={title}
-                                onChangeTitle={(event: ChangeEvent<HTMLInputElement>) => setTitle(event.target.value)}
-                                
-                                departmentId={departmentId}
-                                onChangeDepartment={(e: SelectChangeEvent) => setDepartmentId(e.target.value)}
+  const validateDescription = (): boolean => {
+    const isRoleSelected = eeRoleTypeId != "";
+    const isQualificationSelected = qualificationId != "";
+    const isContractTypeSelected = contractTypeId != "";
+    const isExperienceSelected = experienceId != "";
+    const isWorkSiteSelected = workSiteId != "";
+    const isMinSalaryValid = minSalary.trim() != "";
+    const isMaxSalaryValid = maxSalary.trim() != "";
 
-                                numberOfPosition={numberOfPosition}
-                                onChangeNumberOfPosition={(event: ChangeEvent<HTMLInputElement>) => {
-                                    const value = event.target.value;
-                                    const numberValue = Number.parseInt(value);
+    setIsRoleError(!isRoleSelected);
+    setIsQualificationError(!isQualificationSelected);
+    setIsContractTypeError(!isContractTypeSelected);
+    setExperienceError(!isExperienceSelected);
+    setIsWorkSiteError(!isWorkSiteSelected);
+    setIsMinSalaryError(!isMinSalaryValid);
+    setIsMaxSalaryError(!isMaxSalaryValid);
 
-                                    if ((numberValue > 0 && numberValue <= 50) || value == "")
-                                        setNumberOfPosition(value)
-                                }}
+    return (
+      isRoleSelected &&
+      isQualificationSelected &&
+      isContractTypeSelected &&
+      isExperienceSelected &&
+      isWorkSiteSelected &&
+      isMinSalaryValid &&
+      isMaxSalaryValid
+    );
+  };
 
-                                reasonId={reasonId}
-                                onChangeReason={(e: SelectChangeEvent) => setReasonId(e.target.value)}
+  async function handleCreateRecruitment() {
+    setLoading(true);
+    try {
+      await createRecruitment(
+        recruitmentTitle,
+        Number.parseInt(departmentId),
+        Number.parseInt(numberOfPosition),
+        startDate?.toDate() ?? new Date(),
+        Number.parseInt(jobJustificationId),
+        // [...selectedCriterias.map((c) => Number.parseInt(c))],
+        Number.parseInt(qualificationId),
+        Number.parseInt(contractTypeId),
+        Number.parseInt(eeRoleTypeId),
+        Number.parseInt(experienceId),
+        Number.parseInt(workSiteId),
+        Number.parseInt(minSalary),
+        Number.parseInt(maxSalary),
+        [...selectedSkills.map((skill) => skill.skillId)]
+      );
 
-                                startDate={startDate}
-                                onChangeStartDate={(newDate: Dayjs | null) => { setStartDate(newDate) }}
-                            />
-                        </CustomTabPanel>
-                        <CustomTabPanel index={1} value={activeStep}>
-                            <CreateDescription
-                                roleId={roleId}
-                                onChangeRole={e => setRoleId(e.target.value)}
+      setAlert({
+        message: "Create Recruitment successfully!",
+        severity: "success",
+      });
+      router.push("./");
+    } catch (ex) {
+      setAlert({
+        message: "Create Recruitment failed!",
+        severity: "error",
+      });
+    } finally {
+      setLoading(false);
+    }
+  }
 
-                                qualificationId={qualificationId}
-                                onChangeQualification={e => setQualificationId(e.target.value)}
+  return (
+    <LayoutContainer
+      activeNav={Navigation.Recruitments}
+      breadcrumbs={[
+        {
+          text: "Trang chủ",
+          href: "",
+        },
+        {
+            text: "Đợt tuyển dụng",
+            href: "/recruitments",
+          },
+          {
+              text: "Tạo mới"
+          }
+      ]}
+    >
+      <MainContentContainer>
+        <Stepper className="mx-auto h-14 flex gap-8" activeStep={activeStep}>
+          {steps.map((label) => {
+            const stepProps: { completed?: boolean } = {};
+            const labelProps: { optional?: React.ReactNode } = {};
 
-                                contractTypeId={contractTypeId}
-                                onChangeContractType={e => setContractTypeId(e.target.value)}
+            return (
+              <Step key={label} {...stepProps}>
+                <StepLabel {...labelProps}>{label}</StepLabel>
+              </Step>
+            );
+          })}
+        </Stepper>
 
-                                workSiteId={workSiteId}
-                                onChangeWorkSite={e => setWorkSiteId(e.target.value)}
+        <section className="mt-2 flex justify-between p-6 gap-10 bg-gray-50 rounded-lg">
+          <main className="flex-shrink-0 w-1/2">
+            <CustomTabPanel index={0} value={activeStep}>
+              <CreateRequisition
+                title={recruitmentTitle}
+                onChangeTitle={(event: ChangeEvent<HTMLInputElement>) =>
+                  setRecruitmentTitle(event.target.value)
+                }
+                isTitleError={isTitleError}
+                setIsTitleError={setIsTitleError}
+                departmentId={departmentId}
+                onChangeDepartment={(e: SelectChangeEvent) =>
+                  setDepartmentId(e.target.value)
+                }
+                isDepartmentError={isDepartmentError}
+                setIsDepartmentError={setIsDepartmentError}
+                numberOfPosition={numberOfPosition}
+                onChangeNumberOfPosition={(
+                  event: ChangeEvent<HTMLInputElement>
+                ) => {
+                  const value = event.target.value;
+                  const numberValue = Number.parseInt(value);
 
-                                selectedSkills={selectedSkills}
-                                onChangeSelectedSkills={e => {
-                                    const value = e.target.value;
-                                    if (typeof value != 'string') {
-                                        setSelectedSkills(value);
-                                    } 
-                                }}
+                  if ((numberValue > 0 && numberValue <= 50) || value == "")
+                    setNumberOfPosition(value);
+                }}
+                isNumberOfPositionError={isNumberOfPositionError}
+                setIsNumberOfPositionError={setIsNumberOfPositionError}
+                reasonId={jobJustificationId}
+                onChangeReason={(e: SelectChangeEvent) =>
+                  setJobJustificationId(e.target.value)
+                }
+                isStartDateError={isStartDateError}
+                setIsStartDateError={setIsStartDateError}
+                startDate={startDate}
+                onChangeStartDate={(newDate: Dayjs | null) => {
+                  setStartDate(newDate);
+                }}
+                isReasonError={isReasonError}
+                setIsReasonError={setIsReasonError}
+                // selectedCriterias={selectedCriterias}
+                // onChangeSelectedCriterias={(e) => {
+                //   if (!e.target.checked) {
+                //     if (selectedCriterias.length <= 3) {
+                //       setAlert({
+                //         message: "There must be at least 3 criterias selected.",
+                //         severity: "warning",
+                //       });
+                //     } else
+                //       setSelectedCriterias(
+                //         selectedCriterias.filter((c) => c != e.target.name)
+                //       );
+                //   } else {
+                //     setSelectedCriterias([...selectedCriterias, e.target.name]);
+                //   }
+                // }}
+              />
+            </CustomTabPanel>
+            <CustomTabPanel index={1} value={activeStep}>
+              <CreateDescription
+                roleId={eeRoleTypeId}
+                onChangeRole={(e) => setEeRoleTypeId(e.target.value)}
+                isRoleError={isRoleError}
+                setIsRoleError={setIsRoleError}
+                qualificationId={qualificationId}
+                onChangeQualification={(e) =>
+                  setQualificationId(e.target.value)
+                }
+                isQualificationError={isQualificationError}
+                setIsQualificationError={setIsQualificationError}
+                experienceId={experienceId}
+                onChangeExperience={(e) => setExperienceId(e.target.value)}
+                isExperienceError={isExperienceError}
+                setExperienceError={setExperienceError}
+                contractTypeId={contractTypeId}
+                onChangeContractType={(e) => setContractTypeId(e.target.value)}
+                isContractTypeError={isContractTypeError}
+                setIsContractTypeError={setIsContractTypeError}
+                workSiteId={workSiteId}
+                onChangeWorkSite={(e) => setWorkSiteId(e.target.value)}
+                isWorkSiteError={isWorkSiteError}
+                setIsWorkSiteError={setIsWorkSiteError}
+                selectedSkills={selectedSkills}
+                onChangeSelectedSkills={(e) => {
+                  const value = e.target.value;
+                  if (typeof value != "string") {
+                    setSelectedSkills(value);
+                  }
+                }}
+                minSalary={minSalary}
+                onChangeMinSalary={(e) => {
+                  const value = e.target.value;
+                  const numberValue = Number.parseInt(value);
 
-                                minSalary={minSalary}
-                                onChangeMinSalary={e => {
-                                    const value = e.target.value;
-                                    const numberValue = Number.parseInt(value);
+                  if (numberValue < 1) setMinSalary("0");
+                  else if (numberValue > 250000) setMinSalary("250000");
+                  else setMinSalary(value);
+                }}
+                isMinSalaryError={isMinSalaryError}
+                setIsMinSalaryError={setIsMinSalaryError}
+                maxSalary={maxSalary}
+                onChangeMaxSalary={(e) => {
+                  const value = e.target.value;
+                  const numberValue = Number.parseInt(value);
 
-                                    if (numberValue < 1)
-                                        setMinSalary("0")
-                                    else if (numberValue > 250_000)
-                                        setMinSalary("250000")
-                                    else setMinSalary(value); 
-                                }}
+                  if (numberValue < 1) setMaxSalary("0");
+                  else if (numberValue > 250000) setMaxSalary("250000");
+                  else setMaxSalary(value);
+                }}
+                isMaxSalaryError={isMaxSalaryError}
+                setIsMaxSalaryError={setIsMaxSalaryError}
+                isSkillsError={isSkillsError}
+                setIsSkillsError={setIsSkillsError}
+              />
+            </CustomTabPanel>
+          </main>
 
-                                maxSalary={maxSalary}
-                                onChangeMaxSalary={e => {
-                                    const value = e.target.value;
-                                    const numberValue = Number.parseInt(value);
+          <aside className="w-2/5 h-[540px] mx-auto flex flex-col justify-between">
+            <CustomTabPanel index={0} value={activeStep}>
+              <Typography variant="h6">Đơn tuyển dụng</Typography>
+              <Typography sx={{ marginTop: "12px" }} variant="body1">
+              Yêu cầu tuyển dụng là một yêu cầu hoặc tài liệu chính thức do một bộ phận trong tổ chức khởi xướng để lấp đầy một vị trí còn trống. Bước quan trọng này trong quá trình tuyển dụng đóng vai trò là điểm khởi đầu để thu hút nhân tài mới, phác thảo các chi tiết cụ thể về cơ hội việc làm.
+              </Typography>
+            </CustomTabPanel>
+            <CustomTabPanel index={1} value={activeStep}>
+              <Typography variant="h6">Mô tả công việc</Typography>
+              <Typography sx={{ marginTop: "12px" }} variant="body1">
+              Bản mô tả công việc là một tài liệu chính thức bằng văn bản nêu rõ các nhiệm vụ, trách nhiệm, trình độ chuyên môn và các chi tiết khác liên quan đến một công việc hoặc vị trí cụ thể trong một tổ chức. Nó phục vụ như một hướng dẫn toàn diện cho cả người tìm việc và nhân viên hiện tại, cung cấp sự hiểu biết rõ ràng về những kỳ vọng và yêu cầu liên quan đến vai trò này.
+              </Typography>
+            </CustomTabPanel>
 
-                                    if (numberValue < 1)
-                                        setMaxSalary("0")
-                                    else if (numberValue > 250_000)
-                                        setMaxSalary("250000")
-                                    else setMaxSalary(value);
-                                }}
-                            />
-                        </CustomTabPanel>
-                    </main>
-                    
-                    <aside className="w-2/5 mx-auto flex flex-col justify-between">
-                        <CustomTabPanel index={0} value={activeStep}>
-                            <Typography variant="h6">Recruitment Requisition</Typography>
-                            <Typography sx={{marginTop: "12px"}} variant="body1">A recruitment requisition is a formal request or document initiated by a department within an organization to fill a vacant position. This crucial step in the hiring process serves as the starting point for acquiring new talent, outlining the specific details of the job opening.</Typography>
-                        </CustomTabPanel>
-                        <CustomTabPanel index={1} value={activeStep}>
-                            <Typography variant="h6">Recruitment Description</Typography>
-                            <Typography sx={{marginTop: "12px"}} variant="body1">A job description is a formal written document that outlines the duties, responsibilities, qualifications, and other details associated with a specific job or position within an organization. It serves as a comprehensive guide for both job seekers and current employees, providing a clear understanding of the expectations and requirements associated with the role.</Typography>
-                        </CustomTabPanel>
-
-                        <div className="ml-auto flex gap-6">
-                            <Button
-                                color="inherit"
-                                disabled={activeStep === 0}
-                                onClick={handleBack}
-                            >
-                                Back
-                            </Button>
-                            <Button onClick={handleNext}>
-                            {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                            </Button>
-                        </div>
-                    </aside>
-                </section>
-            </MainContentContainer>
-        </div>
-    )
+            <div className="ml-auto flex gap-6">
+              <Button
+                color="inherit"
+                disabled={activeStep == 0}
+                onClick={handleBack}
+              >
+                Trở lại
+              </Button>
+              <Button onClick={handleNext}>
+                {activeStep === 1 ? "Hoàn thành" : "Tiếp tục"}
+              </Button>
+            </div>
+          </aside>
+        </section>
+      </MainContentContainer>
+    </LayoutContainer>
+  );
 }

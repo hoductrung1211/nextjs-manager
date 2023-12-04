@@ -5,12 +5,12 @@ import React, { useEffect, useMemo, useState } from "react";
 import EnhancedTableHead from "@/components/mui/EnhancedTableHead";
 import { Order, getComparator, stableSort } from "@/utils/functions/sort";
 import Link from "next/link";
-import { RecruitmentFilter, getAllRecruitments } from "@/apis/recruitments";
 import { Dayjs } from "dayjs";
 import AddIcon from '@mui/icons-material/Add';
 import useLoadingAnimation from "@/hooks/useLoadingAnimation";
 import RecruitmentStateChip from "../RecruitmentStateChip";
 import RecruitmentListContainer from "../RecruitmentContainer";
+import { getOperatingRecruitments } from "@/apis/recruitments/recruitments";
 
 interface IRecruitmentData {
     recruitmentId: number;
@@ -38,47 +38,45 @@ const headCells: HeadCell[] = [
         id: "recruitmentTitle",
         numeric: false,
         disablePadding: false,
-        label: "Title",
-        width: "30%"
+        label: "Tiêu đề",
+        width: "25%"
     },
     {
         id: "departmentName",
         numeric: false,
         disablePadding: false,
-        label: "Department",
+        label: "Phòng ban",
         width: "15%"
     },
     {
         id: "jobJustificationName",
         numeric: false,
         disablePadding: false,
-        label: "Justification",
-        width: "15%"
+        label: "Lý do",
+        width: "20%"
     },
     {
         id: "numberOfApplicant",
         numeric: true,
         disablePadding: false,
-        label: "Number Of Applicant",
-        width: "20%"
+        label: "Số lượng ứng viên",
+        width: "15%"
     },
     {
         id: "createdTime",
         numeric: true,
         disablePadding: false,
-        label: "Cread Time",
+        label: "Thời gian tạo",
         width: "15%"
     },
     {
         id: "recruitmentStateName",
         numeric: false,
         disablePadding: false,
-        label: "State",
-        width: "10%"
+        label: "Trạng thái",
+        width: "15%"
     },
 ];
-
-
 
 export default function OperatingRecruitmentTable() {
     const [rows, setRows] = useState<readonly IRecruitmentData[]>([]);
@@ -110,19 +108,19 @@ export default function OperatingRecruitmentTable() {
         try { 
             setLoading(true);
 
-            const { data: recruitments } = await getAllRecruitments(RecruitmentFilter.Operating);
+            const { data: recruitments } = await getOperatingRecruitments();
 
             const newRows: IRecruitmentData[] = recruitments.map(recruitment => ({
                 recruitmentId: recruitment.recruitmentId,
-                departmentId: recruitment.departmentId + "",
-                recruitmentStateId: recruitment.recruitmentStateId,
+                departmentId: recruitment.department.departmentId + "",
+                recruitmentStateId: recruitment.recruitmentState.recruitmentStateId,
 
                 recruitmentTitle: recruitment.recruitmentTitle,
-                departmentName: recruitment.departmentName,
+                departmentName: recruitment.department.departmentName,
                 numberOfApplicant: recruitment.numberOfApplicant,
-                jobJustificationName: recruitment.jobJustificationName,
-                recruitmentStateName: recruitment.recruitmentStateName,
-                createdTime: recruitment.createdTime.toLocaleString()
+                jobJustificationName: recruitment.jobJustification.jobJustificationName,
+                recruitmentStateName: recruitment.recruitmentState.recruitmentStateName,
+                createdTime: recruitment.createdDateTime.toLocaleString()
             }));
 
             setRows(newRows);
@@ -196,7 +194,7 @@ export default function OperatingRecruitmentTable() {
                     href="./recruitments/create"
                     onClick={() => setLoading(true)}
                 >
-                    Create
+                    Tạo
                 </Button>
             </EnhancedTableToolbar>
             <TableContainer sx={{maxHeight: 500}}>

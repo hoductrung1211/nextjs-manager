@@ -41,21 +41,57 @@ const config: Config = {
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
       colors: {
-        'dark': '#424245',
-        'dark-light': '#6E6E73',
-        'concrete': '#95A5A6', 
+        'primary': '#16a085',
+        'secondary': '#77A8D5',
+        'success': '#1abc9c',
+        'info': '#3498db',
+        'warning': '#F1C40F',
+        'error': '#E74C3C',
+
+        'dark': '#202124',
+        'subdued': '#F5F5F5',
+        'content': '#F9FAFB',
         'grey': '#f0f0f0',
         'default': '#FAFAFC',
-        "green-sea": "#16a085",
-        "nephritis": "#27ae60",
-        "belize-hole": "#2980b9",
-        "wisteria": "#8e44ad",
-        "midnight-blue": "#2c3e50",
-        "orange": "#f39c12",
-        "pumpkin": "#d35400",
-        "pomegranate": "#c0392b",
-        "asbestos": "#7f8c8d",
-        "wet-asphalt": "#34495e"
+
+        // FLAT UI PALETTE
+        'turquoise': '#1abc9c',
+        'green-sea': '#16a085',
+        
+        'emerald': '#2ecc71',
+        'nephritis': '#27ae60',
+
+        'peter-river': '#3498db',
+        'belize-hole': '#2980b9',
+
+        'amethyst': '#9b59b6',
+        'wisteria': '#8e44ad',
+
+        'wet-asphalt': '#34495e',
+        'midnight-blue': '#2c3e50',
+
+        'sun-flower': '#f1c40f',
+        'orange': '#f39c12',
+
+        'carrot': '#e67e22',
+        'pumpkin': '#d35400',
+
+        'alizarin': '#e74c3c',
+        'pomegranate': '#c0392b',
+
+        'clouds': '#ecf0f1',
+        'silver': '#bdc3c7',
+
+        'concrete': '#95a5a6',
+        'asbestos': '#7f8c8d',
+
+        // APPLE COLORS
+        'apple-gray': '#8E8E93',
+        'apple-gray-2': '#AEAEB2',
+        'apple-gray-3': '#C7C7CC',
+        'apple-gray-4': '#D1D1D6',
+        'apple-gray-5': '#E5E5EA',
+        'apple-gray-6': '#F2F2F7',
       },
       backdropBlur: {
         'xs': '2px'

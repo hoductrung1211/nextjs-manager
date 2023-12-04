@@ -8,12 +8,17 @@ import { useState } from "react";
 import RecruitmentBasicInfo from "@/features/recruitments/info-detail-basic/RecruitmentDetail";
 import TabChip from "@/components/TabChip";
 
-export default function Page() {
+export default function Page({
+    params: {id}
+}: {
+    params: {id: string}
+}) {
     const [tabValue, setTabValue] = useState<0 | 1>(0);
     
     function handleChangeTab(event: React.SyntheticEvent, newValue:0 | 1) {
         setTabValue(newValue);
     }
+    
     return (
         <div className="w-full h-screen flex flex-col rounded-xl overflow-auto">
             <BreadcrumbHeader>
@@ -47,13 +52,16 @@ export default function Page() {
                     />
                 </Tabs>
                 <CustomTabPanel value={tabValue} index={0}>
-                    <RecruitmentBasicInfo />
+                    <RecruitmentBasicInfo id={id} />
                 </CustomTabPanel>
                 <CustomTabPanel value={tabValue} index={1}>
+                
                 </CustomTabPanel>
                 <CustomTabPanel value={tabValue} index={2}>
+                
                 </CustomTabPanel>
                 <CustomTabPanel value={tabValue} index={3}>
+                
                 </CustomTabPanel>
             </MainContentContainer>
         </div>

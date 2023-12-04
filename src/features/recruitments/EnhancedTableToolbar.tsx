@@ -2,10 +2,11 @@
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Tooltip } from "@mui/material";
 import Button from '@mui/material/Button';
 import { DatePicker } from "@mui/x-date-pickers";
-import { IDepartment, getAllDepartments } from "@/apis/masterData";
 import { Dayjs } from "dayjs";
 import Icon from "@/components/Icon";
 import { useEffect, useState } from "react";
+import IDepartment from "@/models/Department";
+import { getAllDepartments } from "@/apis/masterDatas/departments";
 
 interface ITableToolbarProps {
     departmentId: string,
@@ -51,8 +52,8 @@ export default function EnhancedTableToolbar({
     return (
         <div className="h-20 px-3 flex justify-between items-center">
             <div className="w-full flex gap-10 items-center">
-                <FormControl variant="standard">
-                    <InputLabel id="demo-simple-select-label">Department</InputLabel>
+                <FormControl variant="standard" size="small">
+                    <InputLabel id="demo-simple-select-label">Phòng ban</InputLabel>
                     <Select
                         className="w-60"
                         labelId="demo-simple-select-label"
@@ -65,20 +66,20 @@ export default function EnhancedTableToolbar({
                             <em>None</em>
                         </MenuItem>
                         {departments.map(d => (
-                            <MenuItem value={d.departmentId}>{d.departmentName}</MenuItem>
+                            <MenuItem key={d.departmentId} value={d.departmentId}>{d.departmentName}</MenuItem>
                         ))} 
                     </Select>
                 </FormControl>
                 <div className="flex gap-5">
                     <DatePicker
-                        label="Start Date"
+                        label="Ngày bắt đầu"
                         value={startDate}
                         maxDate={endDate ?? undefined}
                         format="DD/MM/YYYY"
                         onChange={onChangeStartDate}
                     />
                     <DatePicker
-                        label="End Date"
+                        label="Ngày kết thúc"
                         value={endDate}
                         minDate={startDate ?? undefined}
                         format="DD/MM/YYYY"

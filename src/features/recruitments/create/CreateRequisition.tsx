@@ -1,7 +1,10 @@
 'use client';
-import { IDepartment, IRequisitionReason, getAllDepartments, getAllRequisitionReasons } from "@/apis/masterData";
+import { getAllDepartments } from "@/apis/masterDatas/departments";
+import { getAllRequisitionReasons } from "@/apis/masterDatas/jobJustifications";
 import useLoadingAnimation from "@/hooks/useLoadingAnimation";
-import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField,  } from "@mui/material";
+import IDepartment from "@/models/Department";
+import IJobJustification from "@/models/JobJustification";
+import { FormControl,  InputLabel, MenuItem, Select, SelectChangeEvent, TextField,  } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs, { Dayjs } from "dayjs";
 import { ChangeEvent, useEffect, useState } from "react";
@@ -18,6 +21,12 @@ interface ICreateRequisition {
     onChangeReason: (e: SelectChangeEvent) => void;
     onChangeNumberOfPosition: (e: ChangeEvent<HTMLInputElement>) => void;
     onChangeStartDate: (newDate: Dayjs | null) => void;
+
+    isTitleError: boolean; setIsTitleError: (newValue: boolean) => void;
+    isDepartmentError: boolean; setIsDepartmentError: (newValue: boolean) => void;
+    isNumberOfPositionError: boolean; setIsNumberOfPositionError: (newValue: boolean) => void;
+    isStartDateError: boolean; setIsStartDateError: (newValue: boolean) => void;
+    isReasonError: boolean; setIsReasonError: (newValue: boolean) => void;
 }
 
 export default function CreateRequisition({
@@ -26,31 +35,44 @@ export default function CreateRequisition({
     numberOfPosition,
     startDate,
     reasonId,
-
+    
     onChangeTitle,
     onChangeDepartment,
     onChangeReason,
     onChangeNumberOfPosition,
-    onChangeStartDate
+    onChangeStartDate,
 
+    isTitleError,
+    isDepartmentError,
+    isNumberOfPositionError,
+    isStartDateError,
+    isReasonError,
+    
+    setIsTitleError,
+    setIsDepartmentError,
+    setIsNumberOfPositionError,
+    setIsStartDateError,
+    setIsReasonError,
 }: ICreateRequisition) {
     const [departments, setDepartments] = useState<IDepartment[]>([]);
-    const [reasons, setReasons] = useState<IRequisitionReason[]>([]);
+    const [reasons, setReasons] = useState<IJobJustification[]>([]);
 
     const setLoading = useLoadingAnimation();
-
+    console.log(`-${title}-`)
     useEffect(() => {
-        fetchDepartments();
+        fetchFields();
     }, []);
 
-    async function fetchDepartments() {
+    async function fetchFields() {
         try {
             setLoading(true);
+            
             const departmentRes = await getAllDepartments();
             setDepartments(departmentRes.data);
 
             const reasonRes = await getAllRequisitionReasons();
             setReasons(reasonRes.data);
+
         }
         catch (ex) {
             console.log(ex);
@@ -60,24 +82,51 @@ export default function CreateRequisition({
         }
     }
 
+    function handleBlurTitle() {
+        if (title.trim() == "")
+            setIsTitleError(true);
+        else setIsTitleError(false);
+    }
+
+    function handleBlurDepartment() {
+        if (departmentId == "")
+            setIsDepartmentError(true);
+        else setIsDepartmentError(false);
+    }
+
+    function handleBlurNumberOfPosition() {
+        if (numberOfPosition == "")
+            setIsNumberOfPositionError(true);
+        else setIsNumberOfPositionError(false);
+    }
+
+    function handleBlurReason() {
+        if (reasonId == "")
+            setIsReasonError(true);
+        else setIsReasonError(false);
+    }
+
     return (
-        <div className="p-8 flex flex-col gap-8 rounded-md shadow-sm border bg-white">
+        <div className="relative max-h-[520px] p-8 flex flex-col gap-8 rounded-md shadow-sm border overflow-y-auto overflow-x-hidden bg-white">
             <TextField
                 fullWidth
                 id="title"
-                label="Recruitment Title"
+                label="Tiêu đề"
                 variant="outlined"
                 value={title}
                 onChange={onChangeTitle}
+                error={isTitleError}
+                onBlur={handleBlurTitle}
             />
             
-            <FormControl fullWidth variant="outlined">
-                <InputLabel className="bg-white" id="department-label">Department</InputLabel>
+            <FormControl fullWidth variant="outlined" error={isDepartmentError}>
+                <InputLabel className="bg-white" id="department-label">Phòng ban</InputLabel>
                 <Select
                     labelId="department-label"
                     id="department-filled"
                     value={departmentId}
                     onChange={onChangeDepartment}
+                    onBlur={handleBlurDepartment}
                 >
                     <MenuItem value="">
                         <em>None</em>
@@ -92,37 +141,62 @@ export default function CreateRequisition({
 
             <TextField
                 fullWidth variant="outlined"
-                id="number" label="Number of position"
+                id="number" label="Số lượng cho vị trí tuyển dụng"
                 type="number"
                 value={numberOfPosition}
                 onChange={onChangeNumberOfPosition}
+                onBlur={handleBlurNumberOfPosition}
+                error={isNumberOfPositionError}
             />
 
             <DatePicker
                 className="w-full"
-                label="Start Date"
+                label="Ngày dự kiến Onboard"
                 value={startDate}
                 minDate={dayjs(new Date()).add(3, 'day')}
                 onChange={onChangeStartDate}
             />
-            <FormControl fullWidth variant="outlined">
-                <InputLabel className="bg-white" id="reason-label">Reason</InputLabel>
+
+            <FormControl fullWidth variant="outlined" error={isReasonError} >
+                <InputLabel className="bg-white" id="reason-label">Lý do mở đơn</InputLabel>
                 <Select
                     labelId="reason-label"
                     id="reason"
                     value={reasonId}
                     onChange={onChangeReason}
+                    onBlur={handleBlurReason}
                 >
                     <MenuItem value="">
                         <em>None</em>
                     </MenuItem>
                     {reasons.map(r => (
-                        <MenuItem value={r.id}>
-                            {r.name}
+                        <MenuItem value={r.jobJustificationId}>
+                            {r.jobJustificationName}
                         </MenuItem>
                     ))}
                 </Select>
             </FormControl>
+
+            {/* <FormControl component="fieldset" variant="standard">
+                <FormLabel component="legend">Recruitment Criterias</FormLabel>
+                <FormGroup className="px-3">
+                    {
+                        criterias.map(criteria => (
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        name={criteria.criteriaId + ""}
+                                        checked={selectedCriterias.includes(criteria.criteriaId + "")}
+                                        onChange={onChangeSelectedCriterias}
+                                    />
+                                }
+                                label={criteria.criteriaName}
+                            />
+                        ))
+                    }
+                </FormGroup>
+                <FormHelperText>There must be at least 3 criterias selected</FormHelperText>
+            </FormControl> */}
         </div>
     )
 }

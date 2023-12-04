@@ -1,16 +1,16 @@
 'use client';
-import Logo from "@/components/Logo";
 import Image from "next/image";
 import loginImgSrc from "@/app/assets/login_02.png";
 import userImgSrc from "@/app/assets/account_01.png";
 import { HTMLInputTypeAttribute,  useState } from "react";
 import Link from "next/link";
 import { Button, Checkbox, FormControl, FormControlLabel, TextField } from "@mui/material";
-import { login } from "@/apis/auth";
+import { login } from "@/apis/auth/auth";
 import useAlert from "@/hooks/useAlert";
 import { isAxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import useLoadingAnimation from "@/hooks/useLoadingAnimation";
+import Logo from "@/components/logo/Logo";
 
 export default function Login() {
     localStorage.clear();
@@ -39,12 +39,12 @@ function LoginSection() {
     const router = useRouter();
     const [inputs, setInputs] = useState<{ [key: string]: { label: string, value: string, type: HTMLInputTypeAttribute } }>({
         "username": {
-            label: "Username",
+            label: "Tên đăng nhập",
             value: "hoductrung",
             type: "text"
         },
         "password": {
-            label: "Password",
+            label: "Mật khẩu",
             value: "Password@123",
             type: "password",
         }
@@ -67,20 +67,21 @@ function LoginSection() {
             const { data: {
                 accessToken,
                 refreshToken,
-                fullName
+                fullName,
+                role,
             }} = await login({
                 username: inputs['username'].value,
                 password: inputs['password'].value,
             });
-            
             localStorage.setItem('accessToken', accessToken);
             localStorage.setItem('refreshToken', refreshToken);
             localStorage.setItem('fullName', fullName);
+            localStorage.setItem('role', role);
             setAlert({
                 severity: "success",
                 message: "Login successfully!"
             });
-            router.push("/dashboard");
+            router.push("/draft");
         }
         catch (error) {
             if (isAxiosError(error)) {
@@ -132,11 +133,11 @@ function LoginSection() {
                 <div className="mt-2 flex items-center justify-between">
                     <FormControlLabel
                         control={<Checkbox defaultChecked />}
-                        label="Remember password"
+                        label="Nhớ mật khẩu"
                         value={isRemembered}
                         onChange={() => setIsRemembered(!isRemembered)}
                     />
-                    <Link className="underline text-blue-400" href={""}>Forgot password</Link>
+                    <Link className="underline text-blue-400" href={""}>Quên mật khẩu</Link>
                 </div>
             </FormControl>
             <section className="mt-auto flex flex-col gap-6 ">
@@ -144,7 +145,7 @@ function LoginSection() {
                     className="h-12 font-bold text-md bg-greensea"
                     variant="contained"
                     onClick={handleLogin}
-                >Login</Button>
+                >Đăng nhập</Button>
             </section>
         </section>
     )

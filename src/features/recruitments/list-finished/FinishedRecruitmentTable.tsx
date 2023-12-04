@@ -1,19 +1,18 @@
 'use client';
 import {  SelectChangeEvent, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow } from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
-import EnhancedTableHead from "../../../components/mui/EnhancedTableHead";
+import EnhancedTableHead from "@/components/mui/EnhancedTableHead";
 import { Order, getComparator, stableSort } from "@/utils/functions/sort";
 import Link from "next/link";
-import { RecruitmentFilter, getAllRecruitments } from "@/apis/recruitments";
 import EnhancedTableToolbar from "../EnhancedTableToolbar";
 import { Dayjs } from "dayjs";
 import useLoadingAnimation from "@/hooks/useLoadingAnimation";
 import RecruitmentContainer from "../RecruitmentContainer";
+import { getFinishedRecruitments } from "@/apis/recruitments/recruitments";
 
 interface IRecruitmentData {
     recruitmentId: number;
     departmentId: string;
-    recruitmentStateId: number;
 
     recruitmentTitle: string;
     departmentName: string;
@@ -35,45 +34,45 @@ const headCells: HeadCell[] = [
         id: "recruitmentTitle",
         numeric: false,
         disablePadding: false,
-        label: "Title",
+        label: "Tiêu đề",
         width: "30%"
     },
     {
         id: "departmentName",
         numeric: false,
         disablePadding: false,
-        label: "Department",
+        label: "Phòng ban",
         width: "20%"
     },
     {
         id: "jobJustificationName",
         numeric: false,
         disablePadding: false,
-        label: "Justification",
+        label: "Lý do",
         width: "15%"
     },
     {
         id: "numberOfHiredApplicant",
         numeric: true,
         disablePadding: false,
-        label: "Hired Number",
+        label: "Số lượng tuyển",
         width: "20%"
     },
-    {
-        id: "finishedTime",
-        numeric: false,
-        disablePadding: false,
-        label: "Finished Time",
-        width: "20%"
-    }, 
+    // {
+    //     id: "finishedTime",
+    //     numeric: false,
+    //     disablePadding: false,
+    //     label: "Thời gian hoàn thành",
+    //     width: "20%"
+    // }, 
 ]; 
 
 export default function FinishedRecruitmentTable() {
-    const [rows, setRows] = useState<readonly IRecruitmentData[]>([]);
-    const [filteredRows, setFilteredRows] = useState<readonly IRecruitmentData[]>([]);
+    const [rows, setRows] = useState<readonly IRecruitmentData[]>([]); console.log(rows);
+    const [filteredRows, setFilteredRows] = useState<readonly IRecruitmentData[]>([]); console.log(filteredRows);
 
     const [order, setOrder] = useState<Order>('desc');
-    const [orderBy, setOrderBy] = useState<keyof IRecruitmentData>('finishedTime');
+    const [orderBy, setOrderBy] = useState<keyof IRecruitmentData>('departmentId');
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(15);
 
@@ -97,28 +96,29 @@ export default function FinishedRecruitmentTable() {
     }, []);     
 
     async function fetchRecruitments() {
+        console.log('hehe');
         try { 
             setLoading(true);
-            const { data: recruitments } = await getAllRecruitments(RecruitmentFilter.Finished);
-
+            const { data: recruitments } = await getFinishedRecruitments();
+            console.log(recruitments);
             const newRows: IRecruitmentData[] = recruitments.map(recruitment => ({
                 recruitmentId: recruitment.recruitmentId,
-                stateId: recruitment.recruitmentStateId,
-                departmentId: recruitment.departmentId + "",
-                recruitmentStateId: recruitment.recruitmentStateId,
+                stateId: recruitment.recruitmentState.recruitmentStateId,
+                departmentId: recruitment.department.departmentId + "",
+                recruitmentStateId: recruitment.recruitmentState.recruitmentStateId,
                 
                 recruitmentTitle: recruitment.recruitmentTitle,
-                departmentName: recruitment.departmentName,
-                jobJustificationName: recruitment.jobJustificationName,
-                finishedTime: recruitment.createdTime.toLocaleString(),
-                numberOfHiredApplicant: recruitment.numberOfPosition,
+                departmentName: recruitment.department.departmentName,
+                jobJustificationName: recruitment.jobJustification.jobJustificationName,
+                finishedTime: "12-11-2001",
+                numberOfHiredApplicant: recruitment.numberOfHiredApplicant,
             }));
-
+            console.log("newRows", newRows);
             setRows(newRows);
             setFilteredRows(newRows);
         }
         catch(ex) {
-            
+            console.log(ex);
         }
         finally {
             setLoading(false);
@@ -204,7 +204,7 @@ export default function FinishedRecruitmentTable() {
                                     <TableCell align="left">{row.departmentName}</TableCell>
                                     <TableCell align="left">{row.jobJustificationName}</TableCell>
                                     <TableCell align="right">{row.numberOfHiredApplicant}</TableCell>
-                                    <TableCell align="left">{row.finishedTime.slice(0, 10)}</TableCell>
+                                    {/* <TableCell align="left">{row.finishedTime.slice(0, 10)}</TableCell> */}
                                 </TableRow>
                             )
                     })}
