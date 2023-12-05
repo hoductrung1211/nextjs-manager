@@ -1,8 +1,5 @@
 'use client';
-import { ThemeProvider } from "@emotion/react"
-import { createTheme } from "@mui/material";
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { createTheme } from "@mui/material"; 
 
 export const theme = createTheme({
     palette: {
@@ -52,6 +49,6 @@ export const theme = createTheme({
                     "fontWeight": 600,
                 }
             }
-        },
+        }, 
     }
 }); 

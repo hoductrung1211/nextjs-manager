@@ -8,9 +8,8 @@ import { useSidebar } from './LayoutContainer';
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
     open?: boolean;
-  }>(({ theme, open }) => ({
+}>(({ theme, open }) => ({
     flexGrow: 1,
-    padding: theme.spacing(3),
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -44,17 +43,14 @@ export default function PageContainer({
     return (
         <>
             <HeadBar open={open} handleDrawerOpen={handleDrawerOpen}>
-            {
-                breadcrumbs?.slice(0, breadcrumbs.length - 1).map(breadcrumb => (
-                    <Link key={breadcrumb.text} href={breadcrumb.href ?? ""}>{breadcrumb.text}</Link>
-                ))
-            }
-            {
-                lastBreadcrumb &&
-                <Typography color="text.primary">
-                    {lastBreadcrumb.text}
-                </Typography>
-            }
+                {breadcrumbs?.slice(0, breadcrumbs.length - 1).map(breadcrumb => (
+                    <Link key={breadcrumb.text} href={breadcrumb.href ?? ""}>{breadcrumb.text}</Link>))
+                }
+                {lastBreadcrumb &&
+                    <Typography color="text.primary">
+                        {lastBreadcrumb.text}
+                    </Typography>
+                }
             </HeadBar>
             <Main className='min-h-screen p-0 flex flex-col text-dark' open={open}>
                 <div className='flex-shrink-0 h-16'></div>

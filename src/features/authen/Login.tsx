@@ -81,7 +81,7 @@ function LoginSection() {
                 severity: "success",
                 message: "Login successfully!"
             });
-            router.push("/draft");
+            router.push("/recruitments");
         }
         catch (error) {
             if (isAxiosError(error)) {
@@ -142,7 +142,11 @@ function LoginSection() {
             </FormControl>
             <section className="mt-auto flex flex-col gap-6 ">
                 <Button
-                    className="h-12 font-bold text-md bg-greensea"
+                    color="primary"
+                    sx={{
+                        "color": "white"
+                    }}
+                    className="h-12 font-bold text-md bg-green-sea"
                     variant="contained"
                     onClick={handleLogin}
                 >Đăng nhập</Button>

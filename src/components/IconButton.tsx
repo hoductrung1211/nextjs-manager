@@ -1,16 +1,33 @@
 import Icon from "./Icon";
+import { IconButtonProps, IconButton as MuiIconButton, Tooltip } from "@mui/material";
+
+export interface IIconButtonProps extends IconButtonProps {
+    name: string;
+    size?: 'small';
+    bgColor?: boolean;
+    tooltip?: string;
+}
 
 export default function IconButton({
-    name
-}: {
-        name: string,
-    onClick: () => void,
-}) {
+    name,
+    size,
+    bgColor = false,
+    tooltip,
+    ...props
+}: IIconButtonProps) {
+
+    if (tooltip) 
+        return (
+            <Tooltip title={tooltip}>
+                <MuiIconButton className={"rounded-md " + (bgColor ? "bg-apple-gray-6 " : "")} size={size ?? "small"} {...props}>
+                    <Icon className="w-8 h-8 grid place-items-center" name={name ?? ""} />
+                </MuiIconButton>
+            </Tooltip>
+    )
+
     return (
-        <button className="rounded-full bg-gray-200">
-            <div className="w-10 h-10 grid place-items-center ">
-                <Icon name={name} />
-            </div>
-        </button>
+        <MuiIconButton className={"rounded-md " + (bgColor ? "bg-apple-gray-6 " : "")} size={size ?? "small"} {...props}>
+            <Icon className="w-8 h-8 grid place-items-center" name={name ?? ""} />
+        </MuiIconButton>
     )
 }

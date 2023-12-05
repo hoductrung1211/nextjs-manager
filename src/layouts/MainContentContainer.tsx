@@ -1,10 +1,12 @@
 export default function MainContentContainer({
-    children
+    children,
+    fixedHeight = false
 }: {
-    children?: React.ReactNode
+        children?: React.ReactNode,
+    fixedHeight?: boolean
 }) {
     return (
-        <main className="h-full px-4 py-2 flex flex-col bg-neutral-100">
+        <main className={"px-4 py-2 flex flex-col bg-neutral-100 " + (fixedHeight ? "h-full " : "min-h-full")}>
             {children}
         </main>
     )

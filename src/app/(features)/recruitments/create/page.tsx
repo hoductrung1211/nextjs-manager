@@ -1,13 +1,11 @@
 "use client";
 import { createRecruitment } from "@/apis/recruitments/recruitments";
 import { CustomTabPanel } from "@/components/mui/Tab";
-import { Navigation } from "@/configs/sidebarNavigation";
 import CreateDescription from "@/features/recruitments/create/CreateDescription";
 import CreateRequisition from "@/features/recruitments/create/CreateRequisition";
 import useAlert from "@/hooks/useAlert";
-import useLoadingAnimation from "@/hooks/useLoadingAnimation"; 
+import useLoadingAnimation from "@/hooks/useLoadingAnimation";
 import MainContentContainer from "@/layouts/MainContentContainer";
-import LayoutContainer from "@/layouts/LayoutContainer";
 import ISkill from "@/models/Skill";
 import {
   Button,
@@ -17,18 +15,19 @@ import {
   Stepper,
   Typography,
 } from "@mui/material";
-import dayjs, { Dayjs } from "dayjs"; 
+import dayjs, { Dayjs } from "dayjs";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";
+import PageContainer from "@/layouts/PageContainer";
 
 const steps = ["Đơn tuyển dụng", "Mô tả công việc"];
 
 export default function Page() {
   // Requisition
-  const [recruitmentTitle, setRecruitmentTitle] = useState("Reactjs Front-end Developer");
+  const [recruitmentTitle, setRecruitmentTitle] = useState("React.js Developer");
   const [departmentId, setDepartmentId] = useState("6");
   const [numberOfPosition, setNumberOfPosition] = useState("2");
-  const [startDate, setStartDate] = useState<Dayjs | null>(dayjs("2024-2-11"));
+  const [startDate, setStartDate] = useState<Dayjs | null>(dayjs().add(1, 'month'));
   const [jobJustificationId, setJobJustificationId] = useState("1");
   // const [selectedCriterias, setSelectedCriterias] = useState<string[]>([
   //   "1",
@@ -149,31 +148,33 @@ export default function Page() {
   async function handleCreateRecruitment() {
     setLoading(true);
     try {
-      await createRecruitment(
+      await createRecruitment({
         recruitmentTitle,
-        Number.parseInt(departmentId),
-        Number.parseInt(numberOfPosition),
-        startDate?.toDate() ?? new Date(),
-        Number.parseInt(jobJustificationId),
-        // [...selectedCriterias.map((c) => Number.parseInt(c))],
-        Number.parseInt(qualificationId),
-        Number.parseInt(contractTypeId),
-        Number.parseInt(eeRoleTypeId),
-        Number.parseInt(experienceId),
-        Number.parseInt(workSiteId),
-        Number.parseInt(minSalary),
-        Number.parseInt(maxSalary),
-        [...selectedSkills.map((skill) => skill.skillId)]
-      );
+        departmentId: Number.parseInt(departmentId),
+        jobJustificationId: Number.parseInt(jobJustificationId),
+        numberOfPosition: Number.parseInt(numberOfPosition),
+        startDate: startDate?.toDate() ?? new Date(),
+        jobDescription: {
+          qualificationId: Number.parseInt(qualificationId),
+          contractTypeId: Number.parseInt(contractTypeId),
+          employeeRoleTypeId: Number.parseInt(eeRoleTypeId),
+          experienceId: Number.parseInt(experienceId),
+          workSiteId: Number.parseInt(workSiteId),
+          minSalary: Number.parseInt(minSalary),
+          maxSalary: Number.parseInt(maxSalary),
+          skillIds: [...selectedSkills.map((skill) => skill.skillId)],
+        },
+      });
 
       setAlert({
-        message: "Create Recruitment successfully!",
+        message: "Tạo Đợt tuyển dụng thành công!",
         severity: "success",
       });
       router.push("./");
     } catch (ex) {
+      
       setAlert({
-        message: "Create Recruitment failed!",
+        message: "Tạo Đợt tuyển dụng thất bại!",
         severity: "error",
       });
     } finally {
@@ -182,20 +183,19 @@ export default function Page() {
   }
 
   return (
-    <LayoutContainer
-      activeNav={Navigation.Recruitments}
+    <PageContainer
       breadcrumbs={[
         {
           text: "Trang chủ",
           href: "",
         },
         {
-            text: "Đợt tuyển dụng",
-            href: "/recruitments",
-          },
-          {
-              text: "Tạo mới"
-          }
+          text: "Đợt tuyển dụng",
+          href: "/recruitments",
+        },
+        {
+          text: "Tạo mới",
+        },
       ]}
     >
       <MainContentContainer>
@@ -212,7 +212,7 @@ export default function Page() {
           })}
         </Stepper>
 
-        <section className="mt-2 flex justify-between p-6 gap-10 bg-gray-50 rounded-lg">
+        <section className="mt-2 flex justify-between p-8 gap-10 bg-gray-50 rounded-lg">
           <main className="flex-shrink-0 w-1/2">
             <CustomTabPanel index={0} value={activeStep}>
               <CreateRequisition
@@ -333,13 +333,22 @@ export default function Page() {
             <CustomTabPanel index={0} value={activeStep}>
               <Typography variant="h6">Đơn tuyển dụng</Typography>
               <Typography sx={{ marginTop: "12px" }} variant="body1">
-              Yêu cầu tuyển dụng là một yêu cầu hoặc tài liệu chính thức do một bộ phận trong tổ chức khởi xướng để lấp đầy một vị trí còn trống. Bước quan trọng này trong quá trình tuyển dụng đóng vai trò là điểm khởi đầu để thu hút nhân tài mới, phác thảo các chi tiết cụ thể về cơ hội việc làm.
+                Yêu cầu tuyển dụng là một yêu cầu hoặc tài liệu chính thức do
+                một bộ phận trong tổ chức khởi xướng để lấp đầy một vị trí còn
+                trống. Bước quan trọng này trong quá trình tuyển dụng đóng vai
+                trò là điểm khởi đầu để thu hút nhân tài mới, phác thảo các chi
+                tiết cụ thể về cơ hội việc làm.
               </Typography>
             </CustomTabPanel>
             <CustomTabPanel index={1} value={activeStep}>
               <Typography variant="h6">Mô tả công việc</Typography>
               <Typography sx={{ marginTop: "12px" }} variant="body1">
-              Bản mô tả công việc là một tài liệu chính thức bằng văn bản nêu rõ các nhiệm vụ, trách nhiệm, trình độ chuyên môn và các chi tiết khác liên quan đến một công việc hoặc vị trí cụ thể trong một tổ chức. Nó phục vụ như một hướng dẫn toàn diện cho cả người tìm việc và nhân viên hiện tại, cung cấp sự hiểu biết rõ ràng về những kỳ vọng và yêu cầu liên quan đến vai trò này.
+                Bản mô tả công việc là một tài liệu chính thức bằng văn bản nêu
+                rõ các nhiệm vụ, trách nhiệm, trình độ chuyên môn và các chi
+                tiết khác liên quan đến một công việc hoặc vị trí cụ thể trong
+                một tổ chức. Nó phục vụ như một hướng dẫn toàn diện cho cả người
+                tìm việc và nhân viên hiện tại, cung cấp sự hiểu biết rõ ràng về
+                những kỳ vọng và yêu cầu liên quan đến vai trò này.
               </Typography>
             </CustomTabPanel>
 
@@ -358,6 +367,6 @@ export default function Page() {
           </aside>
         </section>
       </MainContentContainer>
-    </LayoutContainer>
+    </PageContainer>
   );
 }

@@ -1,32 +1,46 @@
-import { Button, IconButton, Toolbar, Tooltip, Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import VerifiedIcon from '@mui/icons-material/Verified';
 import NotInterestedIcon from '@mui/icons-material/NotInterested';
 
 export default function EnhancedTableToolbar({
-    numSelected
+    numSelected,
+    handleApprove,
+    handleReject,
 }: {
     numSelected: number;
+    handleApprove: () => Promise<void>;
+    handleReject: () => Promise<void>;
 }) {
     return (
         <div className="h-20 px-3 flex justify-between items-center">
             {numSelected > 0 ? (
                 <Typography variant="subtitle1" component="div">
-                    {numSelected} selected
+                    {numSelected} đợt tuyển dụng được lựa chọn
                 </Typography>
             ) : (
                 <Typography variant="body1" component="div">
-                {/* <Typography variant="h6" component="div"> */}
-                    Select All or Click on a Recruitment to review
+                    Chọn đợt tuyển dụng bất kỳ để xét duyệt
                 </Typography>
             )}
 
             {numSelected > 0 ? (
                 <div className="flex gap-3"> 
-                    <Button variant="contained" color="success" startIcon={<VerifiedIcon />}>
-                        Approve
+                    <Button
+                        variant="contained"
+                        className="bg-green-sea"
+                        startIcon={<VerifiedIcon />}
+                        onClick={handleApprove}
+                    >
+                        Thông qua
                     </Button>
-                    <Button variant="contained" color="warning" startIcon={<NotInterestedIcon />}>
-                        Reject
+                    <Button
+                        variant="contained"
+                        color="warning"
+                        className="bg-alizarin"
+                        startIcon={<NotInterestedIcon />}
+                        onClick={handleReject}
+                    >
+                        Từ chối
                     </Button>
                 </div>
             ) : null}

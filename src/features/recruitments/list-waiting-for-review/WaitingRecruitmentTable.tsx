@@ -3,11 +3,13 @@ import { Checkbox, Table, TableBody, TableCell, TableContainer,  TablePagination
 import EnhancedTableToolbar from "./RecruitmentTableToolbar";
 import React, { useEffect, useMemo, useState } from "react"; 
 import { Order, getComparator, stableSort } from "@/utils/functions/sort";
-import Link from "next/link";
 import EnhancedTableHeadCheckbox from "@/components/mui/EnhancedTableHeadCheckbox";
 import useLoadingAnimation from "@/hooks/useLoadingAnimation";
 import RecruitmentContainer from "../RecruitmentContainer";
-import { getWaitingToReviewRecruitments } from "@/apis/recruitments/recruitments";
+import { getWaitingToReviewRecruitments, reviewRecruitment } from "@/apis/recruitments/recruitments";
+import useAlert from "@/hooks/useAlert";
+import { isAxiosError } from "axios";
+import { getVNLocaleDateString } from "@/utils/functions/getLocaleDateString";
 
 interface IRecruitmentData {
     recruitmentId: number;
@@ -47,7 +49,7 @@ const headCells: HeadCell[] = [
         numeric: false,
         disablePadding: false,
         label: "Lý do",
-        width: "20%"
+        width: "15%"
     },
     {
         id: "numberOfPosition",
@@ -68,7 +70,7 @@ const headCells: HeadCell[] = [
         numeric: true,
         disablePadding: false,
         label: "Thời gian tạo",
-        width: "15%"
+        width: "20%"
     }, 
 ];
 
@@ -82,6 +84,7 @@ export default function WaitingRecruitmentTable() {
     const [rowsPerPage, setRowsPerPage] = React.useState(15);
     
     const setLoading = useLoadingAnimation();
+    const setAlert = useAlert();
 
     const visibleRows = useMemo(
         () =>
@@ -172,10 +175,53 @@ export default function WaitingRecruitmentTable() {
         setPage(0);
     };
 
+    const handleReviewRecruitments = async (isApproved: boolean) => {
+        setLoading(true);
+        let count = 0;
+        const handledRecruitments: number[] = [];
+
+        try {
+            for (let i = 0; i < selected.length; i++) {
+                await reviewRecruitment(
+                    selected[i],
+                    {
+                        isApproved: isApproved
+                    });
+                
+                count++;
+
+                handledRecruitments.push(selected[i]);
+            }
+
+            setAlert({
+                message: `${isApproved ? "Thông qua" : "Từ chối"} thành công ${count} Đợt tuyển dụng`,
+                severity: "success"
+            });
+        }
+        catch (ex) {
+            if (isAxiosError(ex)) {
+                setAlert({
+                    message: ex.message,
+                    severity: "error"
+                })
+            }
+        }
+        finally {
+            setRows(rows.filter(recruitment => !handledRecruitments.includes(recruitment.recruitmentId)));
+            setSelected([]);
+
+            setLoading(false);
+        }
+    }
+
     return (
         <RecruitmentContainer>
-            <EnhancedTableToolbar numSelected={selected.length} />
-            <TableContainer sx={{ maxHeight: 500 }}>
+            <EnhancedTableToolbar
+                numSelected={selected.length}
+                handleApprove={() => handleReviewRecruitments(true)}
+                handleReject={() => handleReviewRecruitments(false)}
+            />
+            <TableContainer sx={{ maxHeight: 460 }}>
                 <Table stickyHeader aria-label="sticky table" className="h-full">
                     <EnhancedTableHeadCheckbox
                         numSelected={selected.length}
@@ -210,13 +256,14 @@ export default function WaitingRecruitmentTable() {
                                         scope="row"
                                         padding="none"
                                     >
-                                        <Link href={`recruitments/${row.recruitmentId}/review`}>{row.recruitmentTitle}</Link>
+                                        {row.recruitmentTitle}
+                                        {/* <Link href={`recruitments/${row.recruitmentId}/review`}>{row.recruitmentTitle}</Link> */}
                                     </TableCell>
                                     <TableCell align="left">{row.departmentName}</TableCell>
                                     <TableCell align="left">{row.jobJustificationName}</TableCell>
                                     <TableCell align="right">{row.numberOfPosition}</TableCell>
                                     <TableCell align="left">{row.creatorName}</TableCell>
-                                    <TableCell align="right">{row.createdTime.slice(0, 10)}</TableCell>
+                                    <TableCell align="right">{getVNLocaleDateString(row.createdTime)}</TableCell>
                                 </TableRow>
                             )
                         })}

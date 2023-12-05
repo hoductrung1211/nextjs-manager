@@ -180,7 +180,7 @@ export default function OthersRecruitmentTable() {
                 onClearFilter={handleClearFilter}
                 onFilter={handleFilter}
             /> 
-            <TableContainer sx={{maxHeight: 500}}>
+            <TableContainer sx={{maxHeight: 460}}>
                 <Table stickyHeader aria-label="sticky table" >
                     <EnhancedTableHead
                         orderBy={orderBy}

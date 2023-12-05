@@ -1,4 +1,5 @@
 import IDepartment from "./Department";
+import IJobDescription from "./JobDescription";
 import IJobJustification from "./JobJustification";
 
 export interface IRecruitmentState {
@@ -21,7 +22,7 @@ export interface IOperatingRecruitment {
     department: IDepartment;
     jobJustification: IJobJustification;
     numberOfApplicant: number;
-    createdDateTime: Date;
+    createdDateTime: string;
     recruitmentState: IRecruitmentState;
 }
 
@@ -31,7 +32,7 @@ export interface IOthersRecruitment {
     department: IDepartment;
     jobJustification: IJobJustification;
     description: string;
-    createdDateTime: Date;
+    createdDateTime: string;
     recruitmentState: IRecruitmentState;
 }
 
@@ -42,5 +43,25 @@ export interface IWaitingToReviewRecruitment {
     jobJustification: IJobJustification;
     numberOfPosition: number;
     creatorName: string;
-    createdDateTime: Date;
+    createdDateTime: string;
+}
+
+ 
+export interface IRecruitment {
+    recruitmentId: number;
+    recruitmentTitle: string;
+    jobDescription: IJobDescription;
+    department: IDepartment;
+    startDate: string;
+    jobJustification: IJobJustification;
+    numberOfPosition: number;
+
+    // metadata
+    description?: string;
+    creatorId: number;
+    creatorName: string;
+    createdDateTime: string;
+    approverId?: number;
+    approverName?: number;
+    recruitmentState: IRecruitmentState;
 }

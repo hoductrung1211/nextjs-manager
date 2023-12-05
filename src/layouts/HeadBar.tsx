@@ -1,3 +1,4 @@
+'use client';
 import { Breadcrumbs, styled } from "@mui/material";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import { drawerWidth } from "./Sidebar";
@@ -9,7 +10,7 @@ interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
 }
 
-const AppBar = styled(MuiAppBar, {
+const AppBar = styled("header", {
   shouldForwardProp: (prop) => prop !== "open",
 })<AppBarProps>(({ theme, open }) => ({
   transition: theme.transitions.create(["margin", "width"], {
@@ -37,7 +38,7 @@ export default function HeadBar({
 }) {
   return (
     <AppBar
-      className="fixed top-0 h-16 px-4 flex flex-row items-center gap-4 bg-white shadow-sm text-dark"
+      className="fixed top-0 inset-x-0 h-16 px-4 flex flex-row items-center gap-4 shadow-sm text-dark bg-content z-10"
       open={open}
     >
       <IconButton

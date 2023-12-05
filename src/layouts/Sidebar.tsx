@@ -14,9 +14,9 @@ export default function Sidebar({
     handleDrawerClose,
     setActiveNav,
 }: {
-        open: boolean;
-        activeNav: Navigation;
-        setActiveNav: (nav: Navigation) => void;
+    open: boolean;
+    activeNav: Navigation;
+    setActiveNav: (nav: Navigation) => void;
     handleDrawerClose: () => void;
 }) {
     const [fullName, setFullName] = useState("");
@@ -45,7 +45,7 @@ export default function Sidebar({
             anchor="left"
             open={open}
         >
-            <aside className='h-full flex flex-col gap-2'>
+            <aside className='h-full flex flex-col gap-2 bg-content'>
                 <header className='h-16 px-3 flex justify-between items-center'>
                     <Logo />
                     <IconButton onClick={handleDrawerClose}>

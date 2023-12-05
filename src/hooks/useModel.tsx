@@ -50,10 +50,10 @@ export function ModalProvider({
             <Modal
                 open={isOpenModal}
                 onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-                children={<>{modalChildren}</>}
-            /> 
+                // children={}
+            >
+                <>{modalChildren}</>
+            </Modal>
         </ModalContext.Provider>
     )
 }

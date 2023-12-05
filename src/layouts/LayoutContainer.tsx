@@ -18,7 +18,7 @@ export default function LayoutContainer({
 }: {
     children?: React.ReactNode
 }) {
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(true);
     const [activeNav, setActiveNav] = useState(Navigation.Recruitments);
 
     const handleDrawerOpen = () => {

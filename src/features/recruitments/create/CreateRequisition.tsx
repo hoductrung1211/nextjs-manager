@@ -58,7 +58,6 @@ export default function CreateRequisition({
     const [reasons, setReasons] = useState<IJobJustification[]>([]);
 
     const setLoading = useLoadingAnimation();
-    console.log(`-${title}-`)
     useEffect(() => {
         fetchFields();
     }, []);
@@ -72,7 +71,6 @@ export default function CreateRequisition({
 
             const reasonRes = await getAllRequisitionReasons();
             setReasons(reasonRes.data);
-
         }
         catch (ex) {
             console.log(ex);
@@ -117,6 +115,7 @@ export default function CreateRequisition({
                 onChange={onChangeTitle}
                 error={isTitleError}
                 onBlur={handleBlurTitle}
+                suppressHydrationWarning 
             />
             
             <FormControl fullWidth variant="outlined" error={isDepartmentError}>
@@ -153,7 +152,8 @@ export default function CreateRequisition({
                 className="w-full"
                 label="Ngày dự kiến Onboard"
                 value={startDate}
-                minDate={dayjs(new Date()).add(3, 'day')}
+                minDate={dayjs().add(3, 'day')}
+                format="DD/MM/YYYY"
                 onChange={onChangeStartDate}
             />
 

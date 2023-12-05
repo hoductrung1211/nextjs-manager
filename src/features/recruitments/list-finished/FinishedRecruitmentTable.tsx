@@ -179,7 +179,7 @@ export default function FinishedRecruitmentTable() {
                 onClearFilter={handleClearFilter}
                 onFilter={handleFilter}
             />
-            <TableContainer sx={{ maxHeight: 520 }}>
+            <TableContainer sx={{ maxHeight: 460 }}>
                 <Table stickyHeader aria-label="sticky table" className="h-full">
                     <EnhancedTableHead
                         orderBy={orderBy}
@@ -204,7 +204,6 @@ export default function FinishedRecruitmentTable() {
                                     <TableCell align="left">{row.departmentName}</TableCell>
                                     <TableCell align="left">{row.jobJustificationName}</TableCell>
                                     <TableCell align="right">{row.numberOfHiredApplicant}</TableCell>
-                                    {/* <TableCell align="left">{row.finishedTime.slice(0, 10)}</TableCell> */}
                                 </TableRow>
                             )
                     })}

@@ -11,6 +11,7 @@ import useLoadingAnimation from "@/hooks/useLoadingAnimation";
 import RecruitmentStateChip from "../RecruitmentStateChip";
 import RecruitmentListContainer from "../RecruitmentContainer";
 import { getOperatingRecruitments } from "@/apis/recruitments/recruitments";
+import { getVNLocaleDateString } from "@/utils/functions/getLocaleDateString";
 
 interface IRecruitmentData {
     recruitmentId: number;
@@ -39,7 +40,7 @@ const headCells: HeadCell[] = [
         numeric: false,
         disablePadding: false,
         label: "Tiêu đề",
-        width: "25%"
+        width: "20%"
     },
     {
         id: "departmentName",
@@ -67,7 +68,7 @@ const headCells: HeadCell[] = [
         numeric: true,
         disablePadding: false,
         label: "Thời gian tạo",
-        width: "15%"
+        width: "20%"
     },
     {
         id: "recruitmentStateName",
@@ -197,7 +198,7 @@ export default function OperatingRecruitmentTable() {
                     Tạo
                 </Button>
             </EnhancedTableToolbar>
-            <TableContainer sx={{maxHeight: 500}}>
+            <TableContainer sx={{maxHeight: 460}}>
                 <Table stickyHeader aria-label="sticky table" >
                     <EnhancedTableHead
                         orderBy={orderBy}
@@ -221,7 +222,7 @@ export default function OperatingRecruitmentTable() {
                                     <TableCell align="left">{row.departmentName}</TableCell>
                                     <TableCell align="left">{row.jobJustificationName}</TableCell>
                                     <TableCell align="right">{row.numberOfApplicant}</TableCell>
-                                    <TableCell align="right">{row.createdTime.slice(0, 10)}</TableCell>
+                                    <TableCell align="right">{getVNLocaleDateString(row.createdTime)}</TableCell>
                                     <TableCell align="left">
                                         <RecruitmentStateChip stateId={row.recruitmentStateId}>
                                         {row.recruitmentStateName}
