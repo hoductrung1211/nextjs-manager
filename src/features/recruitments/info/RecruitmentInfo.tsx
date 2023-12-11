@@ -38,7 +38,7 @@ export default function RecruitmentInfo({
     }
 
     return (
-        <main className="p-8 grid grid-cols-3 items-start gap-5  bg-content">
+        <main className="p-8 grid grid-cols-3 items-start gap-5 bg-content">
             <div className="col-span-2 p-5 pb-10 flex flex-col gap-8 border rounded-lg bg-white shadow-sm">
                 <section className="flex flex-col gap-8 pb-8 border-b">
                     <h1 className="text-2xl font-semibold">
@@ -63,12 +63,12 @@ export default function RecruitmentInfo({
                 <section className="flex flex-col gap-8">
                     <h2 className="text-lg">Mô tả công việc</h2>
                     <IconFieldInfo
-                        title="Vai trò của nhân viên được tuyển"
+                        title="Vai trò"
                         iconName="user-tie"
                     >   
                         {recruitment?.jobDescription.employeeRoleType.employeeRoleTypeName}
                     </IconFieldInfo>
-                    <IconFieldInfo title="Kiểu hợp đồng" iconName="file-signature">
+                    <IconFieldInfo title="Loại hợp đồng" iconName="briefcase">
                         {recruitment?.jobDescription.contractType.contractTypeName}
                     </IconFieldInfo>
                     <IconFieldInfo title="Nơi làm việc" iconName="building-user">
@@ -92,6 +92,7 @@ export default function RecruitmentInfo({
                     </IconFieldInfo>
                 </section>
             </div>
+            
             <section className="col-span-1 p-5 flex flex-col gap-8 border rounded-lg  bg-white shadow-sm">
                 <IconFieldInfo title="Người tạo" iconName="user" direction="row">
                     {recruitment?.creatorName}

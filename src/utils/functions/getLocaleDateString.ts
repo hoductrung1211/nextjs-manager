@@ -8,3 +8,13 @@ export function getVNLocaleDateString(date: string) {
                 day: '2-digit'
             });
 }
+
+export function getStandardVNLocaleDateString(date: string) {
+    return new Date(date)
+        .toLocaleDateString("vi-VN",
+            {
+                year: 'numeric',
+                month: 'long',
+                day: '2-digit'
+            });
+}

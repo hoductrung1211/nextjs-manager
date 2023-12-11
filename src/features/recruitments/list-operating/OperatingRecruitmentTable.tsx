@@ -40,21 +40,21 @@ const headCells: HeadCell[] = [
         numeric: false,
         disablePadding: false,
         label: "Tiêu đề",
-        width: "20%"
+        width: "22%"
     },
     {
         id: "departmentName",
         numeric: false,
         disablePadding: false,
         label: "Phòng ban",
-        width: "15%"
+        width: "13%"
     },
     {
         id: "jobJustificationName",
         numeric: false,
         disablePadding: false,
         label: "Lý do",
-        width: "20%"
+        width: "17%"
     },
     {
         id: "numberOfApplicant",

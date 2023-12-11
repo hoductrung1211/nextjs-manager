@@ -37,7 +37,7 @@ export default function JobPostingInfo({
     }
 
     return (
-        <main>
+        <>
             {jobPosting ?
                 <main className="p-8 grid grid-cols-3 items-start gap-5  bg-content">
                     <div className="col-span-2 p-5 pb-10 flex flex-col gap-8 border rounded-lg bg-white shadow-sm">
@@ -61,12 +61,12 @@ export default function JobPostingInfo({
                         <section className="flex flex-col gap-8">
                             <h2 className="text-lg">Mô tả công việc</h2>
                             <IconFieldInfo
-                                title="Vai trò của nhân viên được tuyển"
+                                title="Vai trò"
                                 iconName="user-tie"
                             >
                                 {jobPosting?.jobDescription.employeeRoleType.employeeRoleTypeName}
                             </IconFieldInfo>
-                            <IconFieldInfo title="Kiểu hợp đồng" iconName="file-signature">
+                            <IconFieldInfo title="Loại hợp đồng" iconName="briefcase">
                                 {jobPosting?.jobDescription.contractType.contractTypeName}
                             </IconFieldInfo>
                             <IconFieldInfo title="Nơi làm việc" iconName="building-user">
@@ -108,7 +108,7 @@ export default function JobPostingInfo({
                 </main> :
                 <EmptyJobPosting recruitmentId={recruitmentId} />
             }
-        </main>
+        </>
     )
 }
 

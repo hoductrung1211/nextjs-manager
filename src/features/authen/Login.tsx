@@ -2,7 +2,7 @@
 import Image from "next/image";
 import loginImgSrc from "@/app/assets/login_02.png";
 import userImgSrc from "@/app/assets/account_01.png";
-import { HTMLInputTypeAttribute,  useState } from "react";
+import { HTMLInputTypeAttribute,  useEffect,  useState } from "react";
 import Link from "next/link";
 import { Button, Checkbox, FormControl, FormControlLabel, TextField } from "@mui/material";
 import { login } from "@/apis/auth/auth";
@@ -14,6 +14,10 @@ import Logo from "@/components/logo/Logo";
 
 export default function Login() {
     localStorage.clear();
+
+    useEffect(() => {
+        localStorage.clear();
+    }, []);
 
     return (
       <div className="grid place-items-center h-screen ">
@@ -79,7 +83,7 @@ function LoginSection() {
             localStorage.setItem('role', role);
             setAlert({
                 severity: "success",
-                message: "Login successfully!"
+                message: "Đăng nhập thành công!"
             });
             router.push("/recruitments");
         }
@@ -87,7 +91,7 @@ function LoginSection() {
             if (isAxiosError(error)) {
                 setAlert({
                     severity: "error",
-                    message: "Login failed! Please try again."
+                    message: "Đăng nhập thất bại! Làm ơn thử lại."
                 });
                 console.log(error.message);
             }

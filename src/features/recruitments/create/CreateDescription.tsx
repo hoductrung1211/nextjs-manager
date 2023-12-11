@@ -12,7 +12,7 @@ import IExperience from "@/models/Experience";
 import IQualification from "@/models/Qualification";
 import ISkill from "@/models/Skill";
 import IWorkSite from "@/models/WorkSite";
-import { Box, Chip, FormControl, FormControlLabel, FormLabel,  InputAdornment, InputLabel, MenuItem, OutlinedInput, Radio, RadioGroup, Select, SelectChangeEvent, TextField, Theme, } from "@mui/material";
+import { Box, Chip, FormControl, FormControlLabel, FormLabel, InputAdornment, InputLabel, MenuItem, OutlinedInput, Radio, RadioGroup, Select, SelectChangeEvent, TextField, Theme, } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
 
 export interface ICreateDescriptionProps {
@@ -175,7 +175,7 @@ export default function CreateDescription({
 
   const handleBlurMaxSalary = () => {
     if (maxSalary.trim() == "")
-    setIsMaxSalaryError(true);
+      setIsMaxSalaryError(true);
     else setIsMaxSalaryError(false);
   }
 
@@ -219,7 +219,7 @@ export default function CreateDescription({
 
       <FormControl fullWidth error={isExperienceError}>
         <FormLabel id="contract-label">Kinh nghiệm</FormLabel>
-        <RadioGroup 
+        <RadioGroup
           className="pl-5"
           aria-labelledby="experience-label"
           name="experience-group"
@@ -235,7 +235,7 @@ export default function CreateDescription({
 
       <FormControl fullWidth error={isContractTypeError}>
         <FormLabel id="contract-type-label">Loại hợp đồng</FormLabel>
-        <RadioGroup 
+        <RadioGroup
           className="pl-5"
           aria-labelledby="contract-type-label"
           name="contract-type-group"
@@ -251,7 +251,7 @@ export default function CreateDescription({
 
       <FormControl fullWidth error={isWorkSiteError}>
         <FormLabel id="work-site-label">Nơi làm việc</FormLabel>
-        <RadioGroup 
+        <RadioGroup
           className="pl-5"
           row aria-labelledby="work-site-label"
           name="work-site-group"
@@ -270,7 +270,7 @@ export default function CreateDescription({
         selectedSkills={selectedSkills}
         onChangeSelectedSkills={onChangeSelectedSkills}
       />
-    
+
       <div className="flex gap-5">
         <TextField
           className="text-align-last-right"
@@ -297,7 +297,7 @@ export default function CreateDescription({
           }}
           error={isMaxSalaryError}
           onBlur={handleBlurMaxSalary}
-          /> 
+        />
       </div>
     </div>
   )
@@ -316,42 +316,40 @@ const MenuProps = {
 function MultipleSelectSkillsChip({
   skills,
   selectedSkills,
-  onChangeSelectedSkills 
+  onChangeSelectedSkills
 }: {
   skills: ISkill[],
   selectedSkills: ISkill[],
   onChangeSelectedSkills: (event: SelectChangeEvent<ISkill[]>) => void;
 }) {
   return (
-    <div>
-      <FormControl fullWidth>
-        <InputLabel id="skill-label">Kỹ năng</InputLabel>
-        <Select
-          labelId="skill-chip-label"
-          id="skill-chip"
-          multiple
-          value={selectedSkills}
-          onChange={onChangeSelectedSkills}
-          input={<OutlinedInput id="select-skill-chip" label="Chip" />}
-          renderValue={(selected) => (
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-              {selected.map((skill) => (
-                <Chip key={skill.skillId} label={skill.skillName} />
-              ))}
-            </Box>
-          )}
-          MenuProps={MenuProps}
-        >
-          {skills.map((skill) => (
-            <MenuItem // TODO: Change this from ISkill type into string (skill ID)
-              key={skill.skillId}
-              value={skill}
-            >
-              {skill.skillName}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-    </div>
+    <FormControl fullWidth>
+      <InputLabel id="skill-label">Kỹ năng</InputLabel>
+      <Select
+        labelId="skill-chip-label"
+        id="skill-chip"
+        multiple
+        value={selectedSkills}
+        onChange={onChangeSelectedSkills}
+        input={<OutlinedInput id="select-skill-chip" />}
+        renderValue={(selected) => (
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+            {selected.map((skill) => (
+              <Chip key={skill.skillId} label={skill.skillName} />
+            ))}
+          </Box>
+        )}
+        MenuProps={MenuProps}
+      >
+        {skills.map((skill) => (
+          <MenuItem // TODO: Change this from ISkill type into string (skill ID)
+            key={skill.skillId}
+            value={skill}
+          >
+            {skill.skillName}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
   );
 }

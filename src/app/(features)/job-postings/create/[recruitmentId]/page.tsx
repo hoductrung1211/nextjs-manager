@@ -2,7 +2,7 @@
 import { EnumJobPostingStatus, createJobPosting } from "@/apis/jobPostings/jobPosting";
 import { getRecruitmentById } from "@/apis/recruitments/recruitments";
 import IconFieldInfo from "@/components/IconFieldInfo";
-import { Textarea } from "@/components/Textare";
+import { Textarea } from "@/components/Textarea";
 import useAlert from "@/hooks/useAlert";
 import useLoadingAnimation from "@/hooks/useLoadingAnimation";
 import MainContentContainer from "@/layouts/MainContentContainer";
@@ -201,12 +201,12 @@ export default function Page({
                             <h2 className="text-lg">Thông tin Mô tả công việc</h2>
                             <div className=" p-5 flex flex-col gap-8 border bg-white rounded-md">
                                 <IconFieldInfo
-                                    title="Vai trò của nhân viên được tuyển"
+                                    title="Vai trò"
                                     iconName="user-tie"
                                 >
                                     {recruitment?.jobDescription.employeeRoleType.employeeRoleTypeName}
                                 </IconFieldInfo>
-                                <IconFieldInfo title="Kiểu hợp đồng" iconName="file-signature">
+                                <IconFieldInfo title="Loại hợp đồng" iconName="briefcase">
                                     {recruitment?.jobDescription.contractType.contractTypeName}
                                 </IconFieldInfo>
                                 <IconFieldInfo title="Nơi làm việc" iconName="building-user">

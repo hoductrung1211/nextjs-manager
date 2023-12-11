@@ -12,12 +12,14 @@ export default function IconFieldInfo({
     direction?: "row" | "column";
 }) {
     const containerClass =
-        direction == "row" ? "flex justify-between" : "flex flex-col gap-2";
-    const contentClass = direction == "row" ? "text-end" : "pl-10";
+        direction == "row" ? "flex justify-between items-center" : "flex flex-col gap-2";
+    const contentClass = direction == "row" ? "text-end" : "pl-14";
     return (
         <div className={containerClass}>
-            <div className="flex gap-2 text-gray-500 font-bold">
-                <Icon className="w-8 grid place-items-center text-lg" name={iconName} />
+            <div className="flex items-center gap-4 text-gray-700 font-bold">
+                <div className="w-10 h-10 grid place-items-center rounded-full bg-gray-200">
+                    <Icon className="w-8 grid place-items-center text-lg" name={iconName} />
+                </div>
                 <h6>{title}</h6>
             </div>
             <div className={contentClass}>{children}</div>

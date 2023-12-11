@@ -70,12 +70,15 @@ export default function Page() {
         <CustomTabPanel value={tabValue} index={0}>
           <OperatingRecruitmentTable />
         </CustomTabPanel>
+        
         <CustomTabPanel value={tabValue} index={1}>
           <WaitingRecruitmentTable />
         </CustomTabPanel>
+        
         <CustomTabPanel value={tabValue} index={2}>
           <FinishedRecruitmentTable />
         </CustomTabPanel>
+        
         <CustomTabPanel value={tabValue} index={3}>
           <OthersRecruitmentTable />
         </CustomTabPanel>

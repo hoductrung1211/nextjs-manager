@@ -38,7 +38,7 @@ const headCells: HeadCell[] = [
         numeric: false,
         disablePadding: false,
         label: "Tiêu đề",
-        width: "30%"
+        width: "25%"
     },
     {
         id: "departmentName",
@@ -66,7 +66,7 @@ const headCells: HeadCell[] = [
         numeric: false,
         disablePadding: false,
         label: "Trạng thái",
-        width: "15%"
+        width: "20%"
     },
 ];
  

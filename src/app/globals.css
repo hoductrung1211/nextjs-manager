@@ -12,6 +12,7 @@ html {
     font-size: 14px;
     background-color: #FAFAFC;
     color: #424245ee;
+    scroll-behavior: smooth;
 }
 
 .container {

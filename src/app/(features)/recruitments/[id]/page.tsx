@@ -7,6 +7,8 @@ import TabChip from "@/components/TabChip";
 import PageContainer from "@/layouts/PageContainer";
 import RecruitmentInfo from "@/features/recruitments/info/RecruitmentInfo";
 import JobPostingInfo from "@/features/recruitments/job-posting/JobPostingInfo";
+import Candidates from "@/features/recruitments/candidates/Candidates";
+import InterviewSection from "@/features/recruitments/interviews/InterviewSection";
 
 export default function Page({
     params: { id }
@@ -42,29 +44,24 @@ export default function Page({
                 >
                     <Tab label="Thông tin chung" id="recruitment-tab-0" aria-controls="recruitment-tabpanel-0" />
                     <Tab label="Bài đăng tuyển" id="recruitment-tab-1" aria-controls="recruitment-tabpanel-1" />
-                    <Tab label="Buổi phỏng vấn" id="recruitment-tab-2" aria-controls="recruitment-tabpanel-2" />
-                    <Tab
-                        id="recruitment-tab-3"
-                        aria-controls="recruitment-tabpanel-3"
-                        className="h-[48px]"
-                        icon={
-                            <TabChip label="Ứng viên">3</TabChip>
-                        }
-                        iconPosition="end"
-                    />
+                    <Tab label="Ứng viên" id="recruitment-tab-2" aria-controls="recruitment-tabpanel-2" />
+                    <Tab label="Buổi phỏng vấn" id="recruitment-tab-3" aria-controls="recruitment-tabpanel-3" />
                 </Tabs>
                 
                 <CustomTabPanel value={tabValue} index={0}>
                     <RecruitmentInfo recruitmentId={id} />
                 </CustomTabPanel>
+                
                 <CustomTabPanel value={tabValue} index={1}>
                     <JobPostingInfo recruitmentId={id} />
                 </CustomTabPanel>
+                
                 <CustomTabPanel value={tabValue} index={2}>
-
+                    <Candidates recruitmentId={id} />
                 </CustomTabPanel>
+                
                 <CustomTabPanel value={tabValue} index={3}>
-
+                    <InterviewSection />
                 </CustomTabPanel>
             </MainContentContainer>
         </PageContainer>

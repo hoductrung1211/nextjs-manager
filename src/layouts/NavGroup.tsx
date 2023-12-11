@@ -20,7 +20,7 @@ export default function NavGroup({
     navList?: INavProps[];
     onChangeActiveNav: (nav: Navigation) => void;
 }) {
-    const primaryColor = "text-white bg-primary";    
+    const primaryColor = "text-white bg-primary";
     
     return (
         <nav className="mt-3 flex flex-col px-3 gap-2">

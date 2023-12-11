@@ -6,7 +6,7 @@ export default function MainContentContainer({
     fixedHeight?: boolean
 }) {
     return (
-        <main className={"px-4 py-2 flex flex-col bg-neutral-100 " + (fixedHeight ? "h-full " : "min-h-full")}>
+        <main className={"px-4 flex flex-col bg-neutral-100 " + (fixedHeight ? "h-full " : "min-h-full")}>
             {children}
         </main>
     )
