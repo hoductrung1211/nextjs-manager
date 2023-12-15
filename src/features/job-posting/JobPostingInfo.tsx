@@ -1,6 +1,4 @@
-"use client";
-
-import Icon from "@/components/Icon";
+"use client"; 
 import EmptyJobPosting from "./EmptyJobPosting";
 import { useEffect, useState } from "react";
 import IJobPosting from "@/models/JobPosting";

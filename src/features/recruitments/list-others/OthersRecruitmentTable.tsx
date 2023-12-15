@@ -10,66 +10,8 @@ import  { Dayjs } from "dayjs";
 import useLoadingAnimation from "@/hooks/useLoadingAnimation";
 import RecruitmentStateChip from "../RecruitmentStateChip";
 import RecruitmentContainer from "../RecruitmentContainer";
+import { IRecruitmentData, headCells } from "./config";
 
-interface IRecruitmentData {
-    recruitmentId: number;
-    departmentId: string;
-    recruitmentStateId: number;
-    
-    recruitmentTitle: string;
-    departmentName: string;
-    jobJustificationName: string;
-    description: string;
-    createdDateTime: string;
-    recruitmentStateName: string;
-}
-
-interface HeadCell {
-    id: keyof IRecruitmentData;
-    label: string;
-    numeric: boolean; 
-    disablePadding: boolean;
-    width?: string;
-}
-
-const headCells: HeadCell[] = [
-    {
-        id: "recruitmentTitle",
-        numeric: false,
-        disablePadding: false,
-        label: "Tiêu đề",
-        width: "25%"
-    },
-    {
-        id: "departmentName",
-        numeric: false,
-        disablePadding: false,
-        label: "Phòng ban",
-        width: "15%"
-    },
-    {
-        id: "jobJustificationName",
-        numeric: false,
-        disablePadding: false,
-        label: "Lý do",
-        width: "10%"
-    },
-    {
-        id: "description",
-        numeric: false,
-        disablePadding: false,
-        label: "Chú thích",
-        width: "35%"
-    }, 
-    {
-        id: "recruitmentStateName",
-        numeric: false,
-        disablePadding: false,
-        label: "Trạng thái",
-        width: "20%"
-    },
-];
- 
 export default function OthersRecruitmentTable() {
     const [rows, setRows] = useState<readonly IRecruitmentData[]>([]);
     const [filteredRows, setFilteredRows] = useState<readonly IRecruitmentData[]>([]);

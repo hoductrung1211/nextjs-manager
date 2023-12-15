@@ -10,7 +10,7 @@ const ModalContext = createContext<{
     setIsOpenModal: React.Dispatch<SetStateAction<boolean>>
 }>({
     setModal: () => { },
-    setIsOpenModal: () => {}
+    setIsOpenModal: () => { }
 });
 
 export default function useModal() {
@@ -50,9 +50,10 @@ export function ModalProvider({
             <Modal
                 open={isOpenModal}
                 onClose={handleClose}
-                // children={}
             >
-                <>{modalChildren}</>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                    {modalChildren}
+                </div>
             </Modal>
         </ModalContext.Provider>
     )

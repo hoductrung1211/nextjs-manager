@@ -3,12 +3,12 @@ import MainContentContainer from "@/layouts/MainContentContainer";
 import { CustomTabPanel } from "@/components/mui/Tab";
 import { Tab, Tabs } from "@mui/material";
 import { useState } from "react";
-import TabChip from "@/components/TabChip";
 import PageContainer from "@/layouts/PageContainer";
 import RecruitmentInfo from "@/features/recruitments/info/RecruitmentInfo";
-import JobPostingInfo from "@/features/recruitments/job-posting/JobPostingInfo";
-import Candidates from "@/features/recruitments/candidates/Candidates";
-import InterviewSection from "@/features/recruitments/interviews/InterviewSection";
+import JobPostingInfo from "@/features/job-posting/JobPostingInfo";
+import Candidates from "@/features/candidates/Candidates";
+import InterviewSection from "@/features/interviews/InterviewSection";
+import RecruitmentReport from "@/features/reports/RecruitmentReport";
 
 export default function Page({
     params: { id }
@@ -40,12 +40,13 @@ export default function Page({
                     className="sticky top-16 bg-neutral-100 z-10 shadow-sm"
                     value={tabValue}
                     onChange={handleChangeTab}
-                    aria-label="basic tabs example"
+                    aria-label="recruitment tabs"
                 >
-                    <Tab label="Thông tin chung" id="recruitment-tab-0" aria-controls="recruitment-tabpanel-0" />
-                    <Tab label="Bài đăng tuyển" id="recruitment-tab-1" aria-controls="recruitment-tabpanel-1" />
-                    <Tab label="Ứng viên" id="recruitment-tab-2" aria-controls="recruitment-tabpanel-2" />
-                    <Tab label="Buổi phỏng vấn" id="recruitment-tab-3" aria-controls="recruitment-tabpanel-3" />
+                    <Tab label="Thông tin chung" />
+                    <Tab label="Bài đăng tuyển" />
+                    <Tab label="Ứng viên" />
+                    <Tab label="Buổi phỏng vấn"/>
+                    <Tab label="Báo cáo"/>
                 </Tabs>
                 
                 <CustomTabPanel value={tabValue} index={0}>
@@ -61,7 +62,11 @@ export default function Page({
                 </CustomTabPanel>
                 
                 <CustomTabPanel value={tabValue} index={3}>
-                    <InterviewSection />
+                    <InterviewSection recruitmentId={id} />
+                </CustomTabPanel>
+
+                <CustomTabPanel value={tabValue} index={4}>
+                    <RecruitmentReport />
                 </CustomTabPanel>
             </MainContentContainer>
         </PageContainer>

@@ -160,8 +160,8 @@ export default function Page() {
           employeeRoleTypeId: Number.parseInt(eeRoleTypeId),
           experienceId: Number.parseInt(experienceId),
           workSiteId: Number.parseInt(workSiteId),
-          minSalary: Number.parseInt(minSalary),
-          maxSalary: Number.parseInt(maxSalary),
+          minSalary: Number.parseInt(minSalary) * 1_000,
+          maxSalary: Number.parseInt(maxSalary) * 1_000,
           skillIds: [...selectedSkills.map((skill) => skill.skillId)],
         },
       });

@@ -5,6 +5,7 @@ export default interface IApplicationSubmission {
     candidate: ICandidate;
     recruitmentId: number;
     applicationStatus: IApplicationStatus;
+    applyTime: string;
 }
 
 export interface IApplicationStatus {
@@ -19,22 +20,26 @@ export const applicationStatuses = [
     },
     {
         applicationStatusId: 2,
-        applicationStatusName: "Chờ phỏng vấn"
+        applicationStatusName: "Đạt yêu cầu"
     },
     {
         applicationStatusId: 3,
-        applicationStatusName: "Đã phỏng vấn"
+        applicationStatusName: "Chưa đạt yêu cầu"
     },
     {
         applicationStatusId: 4,
-        applicationStatusName: "Vắng trong buổi phỏng vấn"
+        applicationStatusName: "Đã phỏng vấn"
     },
     {
         applicationStatusId: 5,
-        applicationStatusName: "Được tuyển"
+        applicationStatusName: "Vắng trong buổi phỏng vấn"
     },
     {
         applicationStatusId: 6,
-        applicationStatusName: "Chưa đạt"
+        applicationStatusName: "Được tuyển"
+    },
+    {
+        applicationStatusId: 7,
+        applicationStatusName: "Còn lại"
     },
 ]

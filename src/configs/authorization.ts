@@ -1,17 +1,16 @@
 export const enum Role {
-    Client = "client",
+    // Client = "client",
     HR = "HR",
     HiringManager = "Hiring Manager",
     Employee = "Employee"
 }
 
-export const getRole = () : Role | null => {
+export const getRole = () : Role | undefined => {
     if (localStorage) {
         const role = localStorage.getItem("role");
-
         switch (role) {
-            case Role.Client:
-                return Role.Client;
+            // case Role.Client:
+            //     return Role.Client;
             case Role.HR:
                 return Role.HR;
             case Role.Employee:
@@ -19,8 +18,8 @@ export const getRole = () : Role | null => {
             case Role.HiringManager:
                 return Role.HiringManager;
             default:
-                return null;
+                return undefined;
         }
     }
-    return null;
+    return undefined;
 }

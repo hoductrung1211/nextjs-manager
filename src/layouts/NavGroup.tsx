@@ -1,13 +1,9 @@
+"use client";
 import Icon from "@/components/Icon";
-import { Navigation } from "@/configs/sidebarNavigation";
+import { getRole } from "@/configs/authorization";
+import { INavigation, Navigation } from "@/configs/sidebarNavigation";
 import Link from "next/link";
-
-export interface INavProps {
-    id: Navigation;
-    icon: string;
-    text: string;
-    href: string;
-}
+import { useEffect, useState } from "react";
 
 export default function NavGroup({
     activeNav,
@@ -17,16 +13,26 @@ export default function NavGroup({
 }: {
     activeNav: Navigation;
     title?: string;
-    navList?: INavProps[];
+    navList?: INavigation[];
     onChangeActiveNav: (nav: Navigation) => void;
-}) {
+    }) {
+    const [authorNav, setAuthorNav] = useState(navList);
     const primaryColor = "text-white bg-primary";
     
+    useEffect(() => {
+        const role = getRole();
+        if (role) {
+            const newAuthorNav = authorNav.filter(nav => !nav.role || nav.role.includes(role));
+            setAuthorNav(newAuthorNav);
+        }
+    }, []);
+    
+
     return (
         <nav className="mt-3 flex flex-col px-3 gap-2">
             <legend className="text-sm mb-1">{title}</legend>
             {
-                navList.map(nav => (
+                authorNav.map(nav => (
                     <Link
                         key={nav.id}
                         className={(nav.id == activeNav ? primaryColor : " text-slate-600 hover:bg-apple-gray-6 ") + " h-12 px-3 flex items-center gap-3 text-sm font-semibold rounded-md "}

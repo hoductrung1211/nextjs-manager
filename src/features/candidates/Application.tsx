@@ -49,6 +49,16 @@ export default function Application({
                 title: "Trạng thái",
                 value: application.applicationStatus.applicationStatusName,
             },
+            {
+                title: "Thời gian ứng tuyển",
+                value: new Date(application.applyTime).toLocaleString("vi-VN", {
+                    hour: "numeric",
+                    minute: "numeric",
+                    year: 'numeric',
+                    month: 'long',
+                    day: '2-digit'
+                }),
+            },
         ]);
 
         const qualificationEstimate =
@@ -109,7 +119,7 @@ export default function Application({
                         {
                             userFields.map(info => (
                                 <div className="flex items-center text-apple-gray">
-                                    <p className="w-24 font-semibold">{info.title}</p>
+                                    <p className="w-40 font-semibold">{info.title}</p>
                                     {info.value}
                                 </div>
                             ))
@@ -126,7 +136,7 @@ export default function Application({
                     }}
                 />
             </header>
-            <main className="p-3 flex flex-col gap-3 bg-gray-100 rounded-md">
+            <main className="p-3 flex flex-col gap-3 bg-gray-50 border rounded-md">
                 {candidateFields.map(info => (
                     <div className="flex px-1">
                         <p className="flex-shrink-0 w-36 flex items-center gap-2 font-semibold">
@@ -136,7 +146,9 @@ export default function Application({
                             {info.title}
                         </p>
                         <p className="w-full">{info.value}</p>
-                        <p className="flex-shrink-0 font-semibold">{info.estimate}</p>
+                        <p className={"flex-shrink-0 font-semibold " + (info.estimate == "Đạt" ? " text-primary" : info.estimate == "Chưa đạt" ? "text-carrot" : "")}>
+                            {info.estimate}
+                        </p>
                     </div>
                 ))}
             </main>

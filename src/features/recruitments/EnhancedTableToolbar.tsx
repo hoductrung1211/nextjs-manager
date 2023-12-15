@@ -6,7 +6,7 @@ import { Dayjs } from "dayjs";
 import Icon from "@/components/Icon";
 import { useEffect, useState } from "react";
 import IDepartment from "@/models/Department";
-import { getAllDepartments } from "@/apis/masterDatas/departments";
+import { getAllDepartments } from "@/apis/masterData/departments";
 
 interface ITableToolbarProps {
     departmentId: string,

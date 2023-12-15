@@ -1,6 +1,6 @@
 'use client';
-import { getAllDepartments } from "@/apis/masterDatas/departments";
-import { getAllRequisitionReasons } from "@/apis/masterDatas/jobJustifications";
+import { getAllDepartments } from "@/apis/masterData/departments";
+import { getAllRequisitionReasons } from "@/apis/masterData/jobJustifications";
 import useLoadingAnimation from "@/hooks/useLoadingAnimation";
 import IDepartment from "@/models/Department";
 import IJobJustification from "@/models/JobJustification";
@@ -150,10 +150,10 @@ export default function CreateRequisition({
 
             <DatePicker
                 className="w-full"
+                format="DD/MM/YYYY"
                 label="Ngày dự kiến Onboard"
                 value={startDate}
-                minDate={dayjs().add(3, 'day')}
-                format="DD/MM/YYYY"
+                minDate={dayjs().add(1, 'week')}
                 onChange={onChangeStartDate}
             />
 

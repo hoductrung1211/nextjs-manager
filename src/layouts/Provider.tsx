@@ -5,7 +5,7 @@ import { ThemeProvider } from "@mui/material"
 import { LocalizationProvider } from "@mui/x-date-pickers"
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
 import { theme } from "@/configs/theme";
-import { ModalProvider } from "@/hooks/useModel";
+import { ModalProvider } from "@/hooks/useModal";
 import { LoadingAnimationProvider } from "@/hooks/useLoadingAnimation";
 
 

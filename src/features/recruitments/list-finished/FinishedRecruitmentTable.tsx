@@ -9,63 +9,7 @@ import { Dayjs } from "dayjs";
 import useLoadingAnimation from "@/hooks/useLoadingAnimation";
 import RecruitmentContainer from "../RecruitmentContainer";
 import { getFinishedRecruitments } from "@/apis/recruitments/recruitments";
-
-interface IRecruitmentData {
-    recruitmentId: number;
-    departmentId: string;
-
-    recruitmentTitle: string;
-    departmentName: string;
-    jobJustificationName: string;
-    numberOfHiredApplicant: number;
-    finishedTime: string;
-}
-
-interface HeadCell {
-    id: keyof IRecruitmentData;
-    label: string;
-    numeric: boolean; 
-    disablePadding: boolean;
-    width?: string;
-}
-
-const headCells: HeadCell[] = [
-    {
-        id: "recruitmentTitle",
-        numeric: false,
-        disablePadding: false,
-        label: "Tiêu đề",
-        width: "30%"
-    },
-    {
-        id: "departmentName",
-        numeric: false,
-        disablePadding: false,
-        label: "Phòng ban",
-        width: "20%"
-    },
-    {
-        id: "jobJustificationName",
-        numeric: false,
-        disablePadding: false,
-        label: "Lý do",
-        width: "15%"
-    },
-    {
-        id: "numberOfHiredApplicant",
-        numeric: true,
-        disablePadding: false,
-        label: "Số lượng tuyển",
-        width: "20%"
-    },
-    // {
-    //     id: "finishedTime",
-    //     numeric: false,
-    //     disablePadding: false,
-    //     label: "Thời gian hoàn thành",
-    //     width: "20%"
-    // }, 
-]; 
+import { IRecruitmentData, headCells } from "./constants";
 
 export default function FinishedRecruitmentTable() {
     const [rows, setRows] = useState<readonly IRecruitmentData[]>([]); console.log(rows);

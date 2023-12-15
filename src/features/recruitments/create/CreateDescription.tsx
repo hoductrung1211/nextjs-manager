@@ -1,10 +1,10 @@
 'use client';
-import { getAllContractTypes } from "@/apis/masterDatas/contractTypes";
-import { getAllEmployeeRoleTypes } from "@/apis/masterDatas/employeeRoleTypes";
-import { getAllExperiences } from "@/apis/masterDatas/experiences";
-import { getAllQualifications } from "@/apis/masterDatas/qualifications";
-import { getAllSkills } from "@/apis/masterDatas/skills";
-import { getAllWorkSites } from "@/apis/masterDatas/workSite";
+import { getAllContractTypes } from "@/apis/masterData/contractTypes";
+import { getAllEmployeeRoleTypes } from "@/apis/masterData/employeeRoleTypes";
+import { getAllExperiences } from "@/apis/masterData/experiences";
+import { getAllQualifications } from "@/apis/masterData/qualifications";
+import { getAllSkills } from "@/apis/masterData/skills";
+import { getAllWorkSites } from "@/apis/masterData/workSite";
 import useLoadingAnimation from "@/hooks/useLoadingAnimation";
 import IContractType from "@/models/ContractType";
 import IEmployeeRoleType from "@/models/EmployeeRoleType";
