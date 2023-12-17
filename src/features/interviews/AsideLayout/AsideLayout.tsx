@@ -1,10 +1,12 @@
-"use client"; 
+"use client";
 import IconButton from "@/components/IconButton";
 import GroupItem from "./GroupItem";
 import { useEffect, useState } from "react";
-import IInterviewGroup from "@/models/InterviewGroup";
+import IInterviewGroup, { IInterviewGroupOverview } from "@/models/InterviewGroup";
 import useLoadingAnimation from "@/hooks/useLoadingAnimation";
 import useAlert from "@/hooks/useAlert";
+import { getInterviewGroupsByRecruitmentId } from "@/apis/interviews/interviewGroups";
+import useRecruitment from "@/hooks/useRecruitment";
 
 interface IAsideLayoutProps {
 	onClickAdd: () => void;
@@ -15,9 +17,12 @@ export default function AsideLayout({
 	onClickAdd,
 	onClickDetail,
 }: IAsideLayoutProps) {
+	const {
+		recruitmentId
+	} = useRecruitment();
 	const setLoading = useLoadingAnimation();
 	const setAlert = useAlert();
-	const [groups, setGroups] = useState<IInterviewGroup[]>([]);
+	const [groups, setGroups] = useState<IInterviewGroupOverview[]>([]);
 
 	useEffect(() => {
 		fetchGroups();
@@ -26,7 +31,8 @@ export default function AsideLayout({
 	async function fetchGroups() {
 		setLoading(true);
 		try {
-			
+			const { data: list } = await getInterviewGroupsByRecruitmentId(recruitmentId);
+			setGroups(list);
 		}
 		catch (ex) {
 			setAlert({
@@ -53,11 +59,17 @@ export default function AsideLayout({
 				/>
 			</header>
 			<main className="h-[520px] p-3 flex flex-col gap-4 bg-subdued overflow-auto ">
-				{groups.map(group => (
-					<GroupItem key={group.interviewGroupId}
-						onViewInterviewGroup={() => onClickDetail(group.interviewGroupId)}
-					/>
-				))}
+				{groups.length ?
+					groups.map(group => (
+						<GroupItem key={group.interviewGroupId}
+							interviewGroup={group}
+							onViewClick={() => onClickDetail(group.interviewGroupId)}
+						/>
+					)) :
+					<div className="h-full grid place-items-center text-apple-gray-2">
+						Danh sách trống
+					</div>
+				}
 			</main>
 		</aside>
 	)

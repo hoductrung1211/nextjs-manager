@@ -4,8 +4,9 @@ import Icon from "@/components/Icon";
 import IconFieldInfo from "@/components/IconFieldInfo";
 import useAlert from "@/hooks/useAlert";
 import useLoadingAnimation from "@/hooks/useLoadingAnimation";
+import { RecruitmentProvider } from "@/hooks/useRecruitment";
 import { IRecruitment } from "@/models/Recruitment";
-import { getVNLocaleDateString } from "@/utils/functions/getLocaleDateString";
+import { getVNLocaleDateString } from "@/utils/functions/dateTimeHelper";
 import { Chip } from "@mui/material";
 import { useEffect, useState } from "react";
 
@@ -65,7 +66,7 @@ export default function RecruitmentInfo({
                     <IconFieldInfo
                         title="Vai trò"
                         iconName="user-tie"
-                    >   
+                    >
                         {recruitment?.jobDescription.employeeRoleType.employeeRoleTypeName}
                     </IconFieldInfo>
                     <IconFieldInfo title="Loại hợp đồng" iconName="briefcase">
@@ -85,14 +86,14 @@ export default function RecruitmentInfo({
                     </IconFieldInfo>
                     <IconFieldInfo title="Yêu cầu kỹ năng" iconName="award">
                         <div className="flex flex-wrap gap-4">
-                        {recruitment?.jobDescription.skills.map(skill => (
-                            <Chip key={skill.skillId} label={skill.skillName} />
-                        ))} 
+                            {recruitment?.jobDescription.skills.map(skill => (
+                                <Chip key={skill.skillId} label={skill.skillName} />
+                            ))}
                         </div>
                     </IconFieldInfo>
                 </section>
             </div>
-            
+
             <section className="col-span-1 p-5 flex flex-col gap-8 border rounded-lg  bg-white shadow-sm">
                 <IconFieldInfo title="Người tạo" iconName="user" direction="row">
                     {recruitment?.creatorName}

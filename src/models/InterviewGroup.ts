@@ -9,3 +9,12 @@ export default interface IInterviewGroup {
     interviewers: IEmployee[];
     interviews: IInterview[];
 }
+
+export interface IInterviewGroupOverview {
+    interviewGroupId: number;
+    interviewGroupName: string;
+    recruitmentId: number;
+
+    interviewers: IEmployee[];
+    numberOfInterviews: number;
+}

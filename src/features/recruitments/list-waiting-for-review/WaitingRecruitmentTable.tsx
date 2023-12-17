@@ -9,7 +9,7 @@ import RecruitmentContainer from "../RecruitmentContainer";
 import { getWaitingToReviewRecruitments, reviewRecruitment } from "@/apis/recruitments/recruitments";
 import useAlert from "@/hooks/useAlert";
 import { isAxiosError } from "axios";
-import { getVNLocaleDateString } from "@/utils/functions/getLocaleDateString";
+import { getVNLocaleDateString } from "@/utils/functions/dateTimeHelper";
 import { IRecruitmentData, headCells } from "./config";
 
 

@@ -1,103 +1,116 @@
 "use client";
 import Icon from "@/components/Icon";
 import IconButton from "@/components/IconButton";
+import IInterview from "@/models/Interview";
+import { countAge, getVNLocaleDateString, getVNLocaleDateTimeString } from "@/utils/functions/dateTimeHelper";
+import { useState } from "react";
 
 interface IInterviewProps {
-
+    interview: IInterview
 }
 
 export default function Interview({
-
+    interview
 }: IInterviewProps) {
-    const personalInfo = [
-        {
-            icon: "user",
-            label: "Tên",
-            value: "Trong Nguyen Duc"
-        },
+    const {
+        candidate,
+        dateTime,
+        interviewStatus,
+        interviewEvaluation
+    } = interview;
+    const [personalInfo, setPersonalInfo] = useState([
         {
             icon: "calendar",
             label: "Ngày sinh",
-            value: "26 tháng 9, 2002"
+            value: getVNLocaleDateString(candidate.user.dateOfBirth) + " (" + countAge(candidate.user.dateOfBirth) + " tuổi)",
         },
         {
             icon: "venus-mars",
             label: "Giới tính",
-            value: "Nam"
+            value: candidate.user.sex ? "Nam" : "Nữ"
         },
         {
             icon: "school",
             label: "Trường",
-            value: "Đại học công nghệ thông tin"
+            value: candidate.school + ""
         },
         {
             icon: "user-graduate",
             label: "Bằng cấp",
-            value: "Trung cấp"
+            value: candidate.qualification.qualificationName,
         },
         {
             icon: "chart-simple",
             label: "Kinh nghiệm",
-            value: "Ít hơn 1 năm"
+            value: candidate.experience.experienceName,
         },
         {
             icon: "award",
             label: "Kỹ năng",
-            value: "8 kỹ năng"
+            value: candidate.skills.length
         },
-    ];
+    ]);
 
     const interviewInfo = [
         {
+            icon: "user",
+            value: candidate.user.firstName + " " + candidate.user.lastName,
+        },
+        {
             icon: "calendar",
-            label: "Thời gian phỏng vấn",
-            value: new Date().toLocaleString()
+            value: getVNLocaleDateTimeString(dateTime)
         },
         {
             icon: "circle-nodes",
-            label: "Trạng thái",
-            value: "Chờ phỏng vấn"
-        }, 
-    ]
+            value: interviewStatus.interviewStatusName
+        },
+    ];
 
     return (
-        <section className="p-4 flex gap-8 border rounded-md shadow-sm">
-            <div className="p-4 w-full flex flex-col gap-4 border bg-gray-50 rounded-md">
-                {personalInfo.map(info => (
-                    <div className="flex gap-2">
-                        <Icon className="inline-block w-6" name={info.icon} />
-                        <p className="w-28 font-semibold">{info.label}</p>
-                        {info.value}
-                    </div>
-                ))}
-            </div>
-            <div className="w-full flex flex-col gap-4 ">
-                {interviewInfo.map(info => (
-                    <div className="flex gap-2">
-                        <Icon className="inline-block w-6" name={info.icon} />
-                        <p className="w-44 font-semibold">{info.label}</p>
-                        {info.value}
-                    </div>
-                ))}
-            </div>
-            <div className="flex-shrink-0 justify-self-end w-fit  flex flex-col gap-8">
-                <IconButton
-                    name="edit"
-                    tooltip="Chỉnh sửa"
-                />
-                <IconButton
-                    name="calendar-check"
-                    tooltip="Đánh dấu ứng viên tham dự phỏng vấn"
-                />
-                <IconButton
-                    name="calendar-xmark"
-                    tooltip="Đánh dấu ứng viên vắng mặt"
-                />
-                <IconButton
-                    name="marker"
-                    tooltip="Đánh giá ứng viên"
-                />
-            </div>
+        <section className="p-2 flex flex-col gap-2 border rounded-md shadow-sm bg-white">
+            <header className="flex justify-between">
+                <section className="pl-4 flex gap-12">
+                    {interviewInfo.map(info => (
+                        <div className="flex items-center gap-2">
+                            <Icon className="inline-block w-6" name={info.icon} />
+                            <p>{info.value}</p>
+                        </div>
+                    ))}
+                </section>
+                <section className="flex-shrink-0 flex gap-2">
+                    <IconButton
+                        name="edit"
+                        tooltip="Chỉnh sửa"
+                    />
+                    <IconButton
+                        name="calendar-check"
+                        tooltip="Đánh dấu ứng viên tham dự phỏng vấn"
+                    />
+                    <IconButton
+                        name="calendar-xmark"
+                        tooltip="Đánh dấu ứng viên vắng mặt"
+                    />
+                    {/* <IconButton
+                        name="marker"
+                        tooltip="Đánh giá ứng viên"
+                    /> */}
+                    <IconButton
+                        name="trash"
+                        tooltip="Xóa buổi phỏng vấn"
+                    />
+                </section>
+            </header>
+            <section>
+                <div className="p-4 w-full flex flex-col gap-4 border bg-gray-50 rounded-md">
+                    {personalInfo.map(info => (
+                        <div className="flex gap-2 text-gray-600">
+                            <Icon className="inline-block w-6" name={info.icon} />
+                            <p className="w-28 font-semibold">{info.label}</p>
+                            {info.value}
+                        </div>
+                    ))}
+                </div>
+            </section>
         </section>
     )
 }

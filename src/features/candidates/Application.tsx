@@ -3,7 +3,7 @@ import Icon from "@/components/Icon";
 import IconButton from "@/components/IconButton";
 import IApplicationSubmission from "@/models/ApplicationSubmission";
 import IJobDescription from "@/models/JobDescription";
-import { getStandardVNLocaleDateString } from "@/utils/functions/getLocaleDateString";
+import { getStandardVNLocaleDateString } from "@/utils/functions/dateTimeHelper";
 import { Avatar } from "@mui/material";
 import { useEffect, useState } from "react";
 

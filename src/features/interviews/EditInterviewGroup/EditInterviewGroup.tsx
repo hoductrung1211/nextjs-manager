@@ -1,41 +1,49 @@
 "use client";
+import { getInterviewGroupById } from "@/apis/interviews/interviewGroups";
 import IconButton from "@/components/IconButton";
-import useConfirm from "@/hooks/useConfirm";
-import useModal from "@/hooks/useModal";
-import { Button, FormControl, TextField } from "@mui/material";
-import { useState } from "react";
-import PopupAddInterviewer from "./PopupAddInterviewer";
-import IEmployee from "@/models/Employee";
 import useAlert from "@/hooks/useAlert";
+import useConfirm from "@/hooks/useConfirm";
+import useLoadingAnimation from "@/hooks/useLoadingAnimation";
+import useModal from "@/hooks/useModal";
+import IEmployee from "@/models/Employee";
+import { Button, FormControl, TextField } from "@mui/material";
+import { useEffect, useState } from "react";
+import PopupAddInterviewer from "../CreateInterviewGroup/PopupAddInterviewer";
 
-interface ICreateInterviewGroupProps {
+interface IEditInterviewGroupProps {
+	groupId: number;
 	onCancel: () => void;
 	onSave: (groupName: string, interviewers: IEmployee[]) => void;
 }
 
-export default function CreateInterviewGroup({
+export default function EditInterviewGroup({
+	groupId,
 	onCancel,
 	onSave,
-}: ICreateInterviewGroupProps) {
+}: IEditInterviewGroupProps) {
 	const {
 		setIsOpenModal,
 		setModal,
 	} = useModal();
 	const setConfirm = useConfirm();
+	const setLoading = useLoadingAnimation();
 	const setAlert = useAlert();
 
 	const [groupName, setGroupName] = useState("");
-
 	const [interviewers, setInterviewers] = useState<IEmployee[]>([]);
 
+	useEffect(() => {
+		fetchInterviewGroup();
+	}, []);
+
 	function handleCancel() {
-		setConfirm("Bạn đang thêm mới, nếu trở lại thì nhóm phỏng vấn mới sẽ không được lưu", () => {
+		setConfirm("Bạn đang chỉnh sửa, nếu trở lại thì nhóm phỏng vấn mới sẽ không được lưu", () => {
 			onCancel();
 		});
 	}
 
 	function handleSave() {
-		setConfirm("Lưu vào hệ thống nhóm phỏng vấn mới?", () => {
+		setConfirm("Lưu vào hệ thống sự thay đổi của nhóm phỏng vấn?", () => {
 			onSave(groupName, interviewers);
 		});
 	}
@@ -62,9 +70,25 @@ export default function CreateInterviewGroup({
 		setInterviewers(interviewers.filter(interviewer => interviewer.employeeId != interviewerId));
 	}
 
+	async function fetchInterviewGroup() {
+		setLoading(true);
+		try {
+			const { data: group } = await getInterviewGroupById(groupId);
+
+			setGroupName(group.interviewGroupName);
+			setInterviewers(group.interviewers);
+		}
+		catch (ex) {
+
+		}
+		finally {
+			setLoading(false);
+		}
+	}
+
 	return (
-		<main className="col-span-2 p-4 flex flex-col gap-4 border rounded-md bg-white shadow-sm">
-			<h1 className="text-lg text-primary font-semibold">Tạo mới nhóm phỏng vấn</h1>
+		<main className="col-span-2 p-4 flex flex-col gap-4 border rounded-md bg-white">
+			<h1 className="text-lg text-primary font-semibold">Chỉnh sửa nhóm phỏng vấn</h1>
 			<div className="min-h-[240px] p-4 flex flex-col gap-4 bg-gray-50 border">
 				<FormControl>
 					<TextField

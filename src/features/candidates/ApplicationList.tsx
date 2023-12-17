@@ -104,7 +104,7 @@ export default function ApplicationList({
 						/>)
 					) :
 						<div className="h-full grid place-items-center text-apple-gray-2">
-							Danh sách ứng viên trống
+							Danh sách trống
 						</div>
 					)}
 			</main>

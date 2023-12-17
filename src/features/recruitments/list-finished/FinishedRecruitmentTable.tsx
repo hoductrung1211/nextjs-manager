@@ -12,8 +12,8 @@ import { getFinishedRecruitments } from "@/apis/recruitments/recruitments";
 import { IRecruitmentData, headCells } from "./constants";
 
 export default function FinishedRecruitmentTable() {
-    const [rows, setRows] = useState<readonly IRecruitmentData[]>([]); console.log(rows);
-    const [filteredRows, setFilteredRows] = useState<readonly IRecruitmentData[]>([]); console.log(filteredRows);
+    const [rows, setRows] = useState<readonly IRecruitmentData[]>([]);  
+    const [filteredRows, setFilteredRows] = useState<readonly IRecruitmentData[]>([]);  
 
     const [order, setOrder] = useState<Order>('desc');
     const [orderBy, setOrderBy] = useState<keyof IRecruitmentData>('departmentId');
@@ -40,11 +40,9 @@ export default function FinishedRecruitmentTable() {
     }, []);     
 
     async function fetchRecruitments() {
-        console.log('hehe');
         try { 
             setLoading(true);
             const { data: recruitments } = await getFinishedRecruitments();
-            console.log(recruitments);
             const newRows: IRecruitmentData[] = recruitments.map(recruitment => ({
                 recruitmentId: recruitment.recruitmentId,
                 stateId: recruitment.recruitmentState.recruitmentStateId,
@@ -57,7 +55,6 @@ export default function FinishedRecruitmentTable() {
                 finishedTime: "12-11-2001",
                 numberOfHiredApplicant: recruitment.numberOfHiredApplicant,
             }));
-            console.log("newRows", newRows);
             setRows(newRows);
             setFilteredRows(newRows);
         }

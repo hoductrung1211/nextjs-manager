@@ -1,5 +1,6 @@
 "use client";
-import { EnumJobPostingStatus, createJobPosting } from "@/apis/jobPostings/jobPosting";
+import { EnumJobPostingStatus } from "@/apis/jobPostings/constants";
+import {  createJobPosting } from "@/apis/jobPostings/jobPosting";
 import { getRecruitmentById } from "@/apis/recruitments/recruitments";
 import IconFieldInfo from "@/components/IconFieldInfo";
 import { Textarea } from "@/components/Textarea";

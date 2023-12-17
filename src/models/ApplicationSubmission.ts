@@ -43,3 +43,13 @@ export const applicationStatuses = [
         applicationStatusName: "Còn lại"
     },
 ]
+
+export const enum ApplicationStatus {
+    Pending = 1,
+    Qualified,
+    Imqualified,
+    Interviewed,
+    NotPresentInInterview,
+    Hired,
+    Others
+};

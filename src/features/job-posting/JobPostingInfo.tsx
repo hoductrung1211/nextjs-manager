@@ -6,7 +6,7 @@ import useLoadingAnimation from "@/hooks/useLoadingAnimation";
 import { getJobPostingByRecruitmentId } from "@/apis/jobPostings/jobPosting";
 import IconFieldInfo from "@/components/IconFieldInfo";
 import { Chip } from "@mui/material";
-import { getVNLocaleDateString } from "@/utils/functions/getLocaleDateString";
+import { getVNLocaleDateString } from "@/utils/functions/dateTimeHelper";
 
 export default function JobPostingInfo({
     recruitmentId,

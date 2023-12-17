@@ -11,7 +11,7 @@ import useLoadingAnimation from "@/hooks/useLoadingAnimation";
 import RecruitmentStateChip from "../RecruitmentStateChip";
 import RecruitmentListContainer from "../RecruitmentContainer";
 import { getOperatingRecruitments } from "@/apis/recruitments/recruitments";
-import { getVNLocaleDateString } from "@/utils/functions/getLocaleDateString";
+import { getVNLocaleDateString } from "@/utils/functions/dateTimeHelper";
 import { IRecruitmentData, headCells } from "./constant";
 
 export default function OperatingRecruitmentTable() {

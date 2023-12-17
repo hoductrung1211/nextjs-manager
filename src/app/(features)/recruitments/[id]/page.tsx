@@ -9,6 +9,7 @@ import JobPostingInfo from "@/features/job-posting/JobPostingInfo";
 import Candidates from "@/features/candidates/Candidates";
 import InterviewSection from "@/features/interviews/InterviewSection";
 import RecruitmentReport from "@/features/reports/RecruitmentReport";
+import { RecruitmentProvider } from "@/hooks/useRecruitment";
 
 export default function Page({
     params: { id }
@@ -36,39 +37,41 @@ export default function Page({
             }
         ]}>
             <MainContentContainer>
-                <Tabs
-                    className="sticky top-16 bg-neutral-100 z-10 shadow-sm"
-                    value={tabValue}
-                    onChange={handleChangeTab}
-                    aria-label="recruitment tabs"
-                >
-                    <Tab label="Thông tin chung" />
-                    <Tab label="Bài đăng tuyển" />
-                    <Tab label="Ứng viên" />
-                    <Tab label="Buổi phỏng vấn"/>
-                    <Tab label="Báo cáo"/>
-                </Tabs>
-                
-                <CustomTabPanel value={tabValue} index={0}>
-                    <RecruitmentInfo recruitmentId={id} />
-                </CustomTabPanel>
-                
-                <CustomTabPanel value={tabValue} index={1}>
-                    <JobPostingInfo recruitmentId={id} />
-                </CustomTabPanel>
-                
-                <CustomTabPanel value={tabValue} index={2}>
-                    <Candidates recruitmentId={id} />
-                </CustomTabPanel>
-                
-                <CustomTabPanel value={tabValue} index={3}>
-                    <InterviewSection recruitmentId={id} />
-                </CustomTabPanel>
+                <RecruitmentProvider recruitmentId={id}>
+                    <Tabs
+                        className="sticky top-16 bg-neutral-100 z-10 shadow-sm"
+                        value={tabValue}
+                        onChange={handleChangeTab}
+                        aria-label="recruitment tabs"
+                    >
+                        <Tab label="Thông tin chung" />
+                        <Tab label="Bài đăng tuyển" />
+                        <Tab label="Ứng viên" />
+                        <Tab label="Buổi phỏng vấn" />
+                        <Tab label="Báo cáo" />
+                    </Tabs>
 
-                <CustomTabPanel value={tabValue} index={4}>
-                    <RecruitmentReport />
-                </CustomTabPanel>
+                    <CustomTabPanel value={tabValue} index={0}>
+                        <RecruitmentInfo recruitmentId={id} />
+                    </CustomTabPanel>
+
+                    <CustomTabPanel value={tabValue} index={1}>
+                        <JobPostingInfo recruitmentId={id} />
+                    </CustomTabPanel>
+
+                    <CustomTabPanel value={tabValue} index={2}>
+                        <Candidates recruitmentId={id} />
+                    </CustomTabPanel>
+
+                    <CustomTabPanel value={tabValue} index={3}>
+                        <InterviewSection />
+                    </CustomTabPanel>
+
+                    <CustomTabPanel value={tabValue} index={4}>
+                        <RecruitmentReport />
+                    </CustomTabPanel>
+                </RecruitmentProvider>
             </MainContentContainer>
-        </PageContainer>
+        </PageContainer >
     )
 }

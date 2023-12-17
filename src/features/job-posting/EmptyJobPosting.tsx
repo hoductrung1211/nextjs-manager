@@ -10,7 +10,7 @@ export default function EmptyJobPosting({
     const router = useRouter();
     
     return (
-        <div className="h-[600px] grid place-items-center">
+        <div className="h-[600px] grid place-items-center bg-content">
             <button
                 className="w-96 h-60 flex flex-col gap-5 justify-center items-center text-apple-gray-3 rounded-lg hover:bg-apple-gray-6 hover:border"
                 onClick={() => {
